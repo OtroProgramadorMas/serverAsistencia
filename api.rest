@@ -1,0 +1,12 @@
+
+### Login Aprendiz
+POST http://localhost:8000/
+Content-Type: application/json
+
+{
+    "email":"juan@gmail.com",
+    "password":"12345",
+    "tipo":"aprendiz"
+}
+
+### Login Funcionario
