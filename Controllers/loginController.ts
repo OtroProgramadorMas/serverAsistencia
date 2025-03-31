@@ -1,7 +1,15 @@
 // deno-lint-ignore-file
 import { generarToken } from "../Helpers/jwt.ts";
-import { listarFuncionario } from "../Models/funcModel.ts";
+import { listarFuncionario_Roles } from "../Models/funcModel.ts";
 import { listarAprendiz } from "../Models/aprendizModel.ts";
+
+interface TokenPayload {
+  id: number | null;
+  nombre: string;
+  email: string;
+  tipo: string;
+  rol?: string; // Opcional porque no todos los usuarios tienen rol
+}
 
 export const iniciarSesion = async (ctx: any) => {
   const { response, request } = ctx;
@@ -9,23 +17,50 @@ export const iniciarSesion = async (ctx: any) => {
 
   try {
     let usuario;
+    let tokenPayload: TokenPayload = {
+      id: null, // Inicializamos como null
+      nombre: "",
+      email: "",
+      tipo: "",
+    };
 
-    if (tipo === "funcionario") {
-      const funcionarios = await listarFuncionario();
+    if (tipo === "funcionario" || tipo === "administrador") {
+      const funcionarios = await listarFuncionario_Roles(tipo);
       if (!Array.isArray(funcionarios)) {
         throw new Error("listarFuncionario no devolvió un array");
       }
+      
       usuario = funcionarios.find(
-        (func: any) => func.email === email && func.password === password,
+        (func) => func.email === email && func.password === password
       );
+      
+      if (usuario) {
+        tokenPayload = {
+          id: usuario.idFuncionario, // Asumiento que es number
+          nombre: usuario.nombres,
+          email: usuario.email,
+          tipo: "funcionario",
+          rol: usuario.rol
+        };
+      }
     } else if (tipo === "aprendiz") {
       const aprendices = await listarAprendiz();
       if (!Array.isArray(aprendices)) {
         throw new Error("listarAprendiz no devolvió un array");
       }
+      
       usuario = aprendices.find(
-        (apr: any) => apr.email_aprendiz === email && apr.password_aprendiz === password,
+        (apr) => apr.email === email && apr.password === password
       );
+      
+      if (usuario) {
+        tokenPayload = {
+          id: usuario.idAprendiz as number, // Aseguramos que es number
+          nombre: usuario.nombres,
+          email: usuario.email,
+          tipo: "aprendiz"
+        };
+      }
     } else {
       response.status = 400;
       response.body = { message: "Tipo de usuario no válido" };
@@ -33,9 +68,18 @@ export const iniciarSesion = async (ctx: any) => {
     }
 
     if (usuario) {
-      const token = await generarToken(usuario.nombres);
+      const token = await generarToken(tokenPayload.nombre); // Enviamos todo el payload
       response.status = 200;
-      response.body = { token };
+      response.body = { 
+        token,
+        user: {
+          id: tokenPayload.id,
+          nombre: tokenPayload.nombre,
+          email: tokenPayload.email,
+          tipo: tokenPayload.tipo,
+          rol: tokenPayload.rol || null
+        }
+      };
     } else {
       response.status = 401;
       response.body = { message: "Credenciales incorrectas" };
