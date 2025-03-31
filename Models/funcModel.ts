@@ -24,15 +24,15 @@ export const listarFuncionario_Roles = async (rol?: string) => {
         f.email,
         f.telefono,
         f.url_imgFuncionario,
-        f.id_tipoDocumento,
+        f.tipo_documento_idtipo_documento,
         ft.password,
-        tf.nombre AS rol
+        tf.tipo_funcionario AS rol
       FROM funcionario f
       INNER JOIN funcionario_has_tipo_funcionario ft 
-        ON f.idFuncionario = ft.funcionario_id
+        ON f.idFuncionario = ft.funcionario_idfuncionario
       INNER JOIN tipo_funcionario tf 
-        ON ft.tipo_funcionario_id = tf.id
-      ${rol ? 'WHERE tf.nombre = ?' : ''}
+        ON ft.tipo_funcionario_idtipo_funcionario = tf.idtipo_funcionario
+      ${rol ? 'WHERE tf.tipo_funcionario = ?' : ''}
     `;
 
     const params = rol ? [rol] : [];

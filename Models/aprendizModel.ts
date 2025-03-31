@@ -1,13 +1,13 @@
 import { Conexion } from "./conexion.ts";
 
 export interface aprendiz {
-    idAprendiz: number | null;
-    documento: string;
-    nombres: string;
-    apellidos: string;
-    telefono: string;
-    email: string;
-    password: string;
+    idaprendiz: number | null;
+    documento_aprendiz: string;
+    nombres_aprendiz: string;
+    apellidos_aprendiz: string;
+    telefono_aprendiz: string;
+    email_aprendiz: string;
+    password_aprendiz: string;
     idFicha: number;
     id_estadoAprendiz: number;
     id_TipoDocumento: number;

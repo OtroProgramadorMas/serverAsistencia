@@ -24,7 +24,7 @@ export const iniciarSesion = async (ctx: any) => {
       tipo: "",
     };
 
-    if (tipo === "funcionario" || tipo === "administrador") {
+    if (tipo === "Instructor" || tipo === "Administrador") {
       const funcionarios = await listarFuncionario_Roles(tipo);
       if (!Array.isArray(funcionarios)) {
         throw new Error("listarFuncionario no devolvió un array");
@@ -42,6 +42,8 @@ export const iniciarSesion = async (ctx: any) => {
           tipo: "funcionario",
           rol: usuario.rol
         };
+
+        console.log()
       }
     } else if (tipo === "aprendiz") {
       const aprendices = await listarAprendiz();
@@ -50,14 +52,14 @@ export const iniciarSesion = async (ctx: any) => {
       }
       
       usuario = aprendices.find(
-        (apr) => apr.email === email && apr.password === password
+        (apr) => apr.email_aprendiz === email && apr.password_aprendiz === password
       );
       
       if (usuario) {
         tokenPayload = {
-          id: usuario.idAprendiz as number, // Aseguramos que es number
-          nombre: usuario.nombres,
-          email: usuario.email,
+          id: usuario.idaprendiz as number, // Aseguramos que es number
+          nombre: usuario.nombres_aprendiz,
+          email: usuario.email_aprendiz,
           tipo: "aprendiz"
         };
       }
