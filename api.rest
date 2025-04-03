@@ -9,4 +9,9 @@ Content-Type: application/json
     "tipo":"aprendiz"
 }
 
-### Login Funcionario
+### Asistencia
+ GET  http://localhost:8000/asistencia
+Content-Type: application/json
+
+
+
