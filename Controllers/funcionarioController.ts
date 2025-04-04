@@ -1,7 +1,7 @@
 import { listarFuncionario_Roles } from "../Models/funcModel.ts"
 
 export const findFuncionarioById = async (ctx: any) => {
-  const { response, params, request } = ctx;
+  const { response, params } = ctx;
 
   try {
     // Extraer ID de los parámetros de la URL
