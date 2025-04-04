@@ -9,7 +9,7 @@ export interface FuncionarioConRol {
   telefono: string;
   url_imgFuncionario: string | null;
   id_tipoDocumento: number;
-  password: string;
+  password: string | null;
   rol: string; // Tipo de funcionario (administrador, docente, etc.)
 }
 

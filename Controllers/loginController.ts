@@ -18,7 +18,7 @@ export const iniciarSesion = async (ctx: any) => {
   try {
     let usuario;
     let tokenPayload: TokenPayload = {
-      id: null, // Inicializamos como null
+      id: 0, // Inicializamos como null
       nombre: "",
       email: "",
       tipo: "",

@@ -20,7 +20,7 @@ export const authMiddleware: Middleware = async (ctx, next) => {
 
     if (
       !authHeader ||
-      !authHeader.startsWith("Julian ")
+      !authHeader.startsWith("Bearer ")
     ) {
       response.status = 401;
       response.body = {
@@ -29,7 +29,7 @@ export const authMiddleware: Middleware = async (ctx, next) => {
       return;
     }
 
-    const token = authHeader.replace("Julian ", "");
+    const token = authHeader.replace("Bearer ", "");
     const payload = await verify(token, crypto_secretKey);
     ctx.state.user = payload;
 

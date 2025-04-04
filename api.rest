@@ -9,9 +9,15 @@ Content-Type: application/json
     "tipo":"aprendiz"
 }
 
+
+### Login Funcionario
+
+GET http://localhost:8000/funcionarios/1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIiwiZXhwIjoxNzQzNzE3Nzk0fQ.uLYxlbFco-6peRvbvzLoYAktCZtFWqCjjEdw1WWQlSQ
+
 ### Asistencia
  GET  http://localhost:8000/asistencia
 Content-Type: application/json
-
 
 
