@@ -9,10 +9,12 @@ Content-Type: application/json
     "tipo":"aprendiz"
 }
 
+
 ### Login Funcionario
 
 GET http://localhost:8000/funcionarios/1
 Content-Type: application/json
+<<<<<<< HEAD
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIiwiZXhwIjoxNzQzNzE3Nzk0fQ.uLYxlbFco-6peRvbvzLoYAktCZtFWqCjjEdw1WWQlSQ
 
 
@@ -21,3 +23,52 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjb
 GET http://localhost:8000/fichas/1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIiwiZXhwIjoxNzQzNzk2OTExfQ.sg-dMCQBiAGrUc7-DwBjaWOLJIbCQKkLBqF0NAzpzGk
+=======
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJKdWFuIEV4dHJhIiwiZXhwIjoxNzQzODIzMzE1fQ.c1Ua-DjQ-BRKkPbUbIcL7P_hdYCBZNdnDrDgQUcJJkA
+### Asistencia
+ GET  http://localhost:8000/asistencia
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJKdWFuIEV4dHJhIiwiZXhwIjoxNzQzODIzMzE1fQ.c1Ua-DjQ-BRKkPbUbIcL7P_hdYCBZNdnDrDgQUcJJkA
+
+
+### Obtener Aprendiz por ID
+GET http://localhost:8000/aprendiz/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJKdWFuIEV4dHJhIiwiZXhwIjoxNzQzODI3NzY1fQ.wQrs8q_GP4HlqAzbIZ6qSqLy7XAQbIbAQVzqUuHPN94
+
+### Obtener asistencias de un aprendiz
+GET http://localhost:8000/asistencia/aprendiz/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJKdWFuIEV4dHJhIiwiZXhwIjoxNzQzODI3NzY1fQ.wQrs8q_GP4HlqAzbIZ6qSqLy7XAQbIbAQVzqUuHPN94
+
+
+
+### Obtener tipos de asistencia
+GET http://localhost:8000/asistencia/tipos/1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJKdWFuIEV4dHJhIiwiZXhwIjoxNzQzODIzMzE1fQ.c1Ua-DjQ-BRKkPbUbIcL7P_hdYCBZNdnDrDgQUcJJkA
+### Crear nueva asistencia
+POST http://localhost:8000/asistencia/1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJKdWFuIEV4dHJhIiwiZXhwIjoxNzQzODIzMzE1fQ.c1Ua-DjQ-BRKkPbUbIcL7P_hdYCBZNdnDrDgQUcJJkA
+
+{
+  "idAprendiz": 2,
+  "idTipoAsistencia": 1,
+  "fecha": "2023-12-01"
+}
+
+### Actualizar una asistencia
+PUT http://localhost:8000/asistencia/5
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJKdWFuIEV4dHJhIiwiZXhwIjoxNzQzODIzMzE1fQ.c1Ua-DjQ-BRKkPbUbIcL7P_hdYCBZNdnDrDgQUcJJkA
+
+{
+  "idTipoAsistencia": 2
+}
+
+### Eliminar una asistencia
+DELETE http://localhost:8000/asistencia/5
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJKdWFuIEV4dHJhIiwiZXhwIjoxNzQzODIzMzE1fQ.c1Ua-DjQ-BRKkPbUbIcL7P_hdYCBZNdnDrDgQUcJJkA
+>>>>>>> main
