@@ -1,0 +1,7 @@
+GET http://localhost:8000/fichas/1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIiwiZXhwIjoxNzQ0MDY2MzgxfQ.CJZvt6qJOq3WdAoncei9VGvwhVXUC5h3EZG4kj8iwBk
+### 
+GET http://localhost:8000/aprendiz_ficha/1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIiwiZXhwIjoxNzQ0MDY2MzgxfQ.CJZvt6qJOq3WdAoncei9VGvwhVXUC5h3EZG4kj8iwBk
