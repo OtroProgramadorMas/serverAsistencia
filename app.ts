@@ -8,6 +8,7 @@ import RouterFicha from "./Routes/fichaRoutes.ts";
 import routerAsistencia from "./Routes/asistenciaRutes.ts";
 import RouterAprendiz from "./Routes/aprendizRoutes.ts";
 import routerHistorial from "./Routes/historialRoutes.ts";
+import routerPrograma from "./Routes/programasRoutes.ts";
 
 const app = new Application();
 
@@ -23,6 +24,7 @@ const Routes = [
   routerAsistencia,
   RouterAprendiz,
   routerHistorial,
+  routerPrograma
 ];
 Routes.forEach((router) => {
   app.use(router.routes());
