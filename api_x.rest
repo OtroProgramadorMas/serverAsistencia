@@ -1,0 +1,6 @@
+
+/// Funcionario
+
+GET http://localhost:8000/func_instructores/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIiwiZXhwIjoxNzQ0MTQ4NDQyfQ.yBipmx7pWREeSYu0sJjG3qWh6gVWFSnvq3C6fHDH8uM
