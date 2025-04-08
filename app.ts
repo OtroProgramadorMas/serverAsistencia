@@ -1,4 +1,4 @@
-import { Application, oakCors } from "./Dependencies/dependencias.ts";
+import { Application, Router, oakCors } from "./Dependencies/dependencias.ts";
 import { logData } from "./Middlewares/logData.ts";
 
 // Routers
@@ -8,21 +8,34 @@ import routerAsistencia from "./Routes/asistenciaRutes.ts";
 import RouterAprendiz from "./Routes/aprendizRoutes.ts";
 import routerHistorial from "./Routes/historialRoutes.ts";
 import RouterFicha from "./Routes/fichaRoutes.ts";
+import routerPrograma from "./Routes/programasRoutes.ts";
+
+// Imagenes
+import { uploadImageMiddleware } from "./Middlewares/uploadFile.ts";
+import { serveStatic } from "./Utilities/imageUrl.ts";
+
 
 const app = new Application();
 
 app.use(oakCors());
 app.use(logData);
 
+// Router para subida de imagenes
+app.use(serveStatic("."));
+const uploadRouter = new Router();
+uploadRouter.post("/upload", uploadImageMiddleware);
+
 const Routes = [
+  RouterLogin,
+  RouterFunc,
+  RouterFicha,
   RouterLogin,
   RouterFunc,
   routerAsistencia,
   RouterAprendiz,
   routerHistorial,
-  RouterLogin,
-  RouterFunc,
-  RouterFicha,
+  routerPrograma,
+  uploadRouter
 ];
 Routes.forEach((router) => {
   app.use(router.routes());
