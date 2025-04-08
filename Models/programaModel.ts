@@ -8,25 +8,27 @@ export interface programa{
     nombre_programa:string;
 }
 
-export const insertarProgramas = async (
-    codigo_programa: number,
-    nombre_programa: string,
-  ) => {
-    try {
-      const query = `
-        INSERT INTO programa (
-          codigo_programa, nombre_programa
-        ) VALUES (?, ?)
-      `;
-  
-      const result = await Conexion.query(query, [codigo_programa, nombre_programa]);
-      return { success: true, id: result.lastInsertId };
-    } catch (error) {
-      console.error("Error al crear programa", error);
-      return { success: false, error };
+export const insertarProgramas = async (codigo_programa: string, nombre_programa: string) => {
+  try {
+    const result = await Conexion.query(
+      "INSERT INTO programa (codigo_programa, nombre_programa) VALUES (?, ?)",
+      [codigo_programa, nombre_programa]
+    );
+
+    console.log("Resultado de la inserción:", result);
+
+    if (result?.affectedRows > 0) {
+      return { success: true, id: result.insertId }; // <-- asegúrate de usar `insertId`
+    } else {
+      return { success: false, msg: "No se insertó ningún registro." };
     }
-  };
-  
+  } catch (error) {
+    console.error("Error en insertarProgramas:", error?.message || error);
+    return { success: false, msg: error.message };
+  }
+};
+
+
 
 
       export const listarProgramas = async () => {

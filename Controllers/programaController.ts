@@ -22,39 +22,38 @@ export const getAllProgramas = async (ctx: any) => {
 };
 
 export const createPrograma = async (ctx: any) => {
-    const { request, response } = ctx;
-  
-    try {
-      // Validar si el body tiene contenido
-      if (!request.hasBody) {
-        response.status = 400;
-        response.body = { success: false, msg: "No se proporcionaron datos." };
-        return;
-      }
-  
-      const body = await request.body().value;
-  
-      const { codigo_programa, nombre_programa } = body;
-  
-      if (!codigo_programa || !nombre_programa) {
-        response.status = 400;
-        response.body = { success: false, msg: "Faltan campos requeridos." };
-        return;
-      }
-  
-      const result = await insertarProgramas(codigo_programa, nombre_programa);
-  
-      if (result.success) {
-        response.status = 201;
-        response.body = { success: true, msg: "Programa creado", id: result.id };
-      } else {
-        response.status = 500;
-        response.body = { success: false, msg: "Error al insertar el programa." };
-      }
-    } catch (error) {
-      console.error("Error en createPrograma:", error);
-      response.status = 500;
-      response.body = { success: false, msg: "Error interno del servidor." };
+  const { request, response } = ctx;
+
+  try {
+    if (!request.hasBody) {
+      response.status = 400;
+      response.body = { success: false, msg: "No se proporcionaron datos." };
+      return;
     }
-  };
+
+    const body = await request.body.json(); // <-- aquí está el cambio
+
+    const { codigo_programa, nombre_programa } = body;
+
+    if (!codigo_programa?.trim() || !nombre_programa?.trim()) {
+      response.status = 400;
+      response.body = { success: false, msg: "Faltan campos requeridos." };
+      return;
+    }
+
+    const result = await insertarProgramas(codigo_programa, nombre_programa);
+
+    if (result.success) {
+      response.status = 201;
+      response.body = { success: true, msg: "Programa creado", id: result.id };
+    } else {
+      response.status = 500;
+      response.body = { success: false, msg: "Error al insertar el programa." };
+    }
+  } catch (error) {
+    console.error("Error en createPrograma:", error);
+    response.status = 500;
+    response.body = { success: false, msg: "Error interno del servidor." };
+  }
+};
 

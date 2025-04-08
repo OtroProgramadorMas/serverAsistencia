@@ -74,3 +74,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJKdWFuI
 GET http://localhost:8000/programas
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIiwiZXhwIjoxNzQ0MDYzOTUxfQ.q5p9s-DmD2Q0gQlC4azxO4sVwzCgZaXbtVIVFIoata8
+
+###Api rest agrgar programa
+POST http://localhost:8000/programas
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIiwiZXhwIjoxNzQ0MTUxODYxfQ.WWGJ8qrHaLMLTfSWBU1OkX-nqRLVNOnnJlS1JJzMjXU
+{
+  "codigo_programa": 2244302,
+  "nombre_programa": "Artes"
+}
