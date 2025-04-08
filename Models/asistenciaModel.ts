@@ -13,6 +13,11 @@ export interface asistencia{
     tipo_asistencia_idtipo_asistencia: number;
 }
 
+export interface tipo_asistencia {
+    idtipo_asistencia: number | null;
+    nombre_tipo_asistencia: string;
+}
+
 export const listarAsistencia = async ()=>{
     try {
         const result = await Conexion.query('SELECT a.idasistencia, a.fecha_asistencia,ta.nombre_tipo_asistencia, ap.documento_aprendiz,ap.nombres_aprendiz,ap.apellidos_aprendiz,ap.telefono_aprendiz, ap.email_aprendiz FROM edu_sena.asistencia a INNER JOIN edu_sena.tipo_asistencia ta ON a.tipo_asistencia_idtipo_asistencia = ta.idtipo_asistencia INNER JOIN edu_sena.aprendiz ap ON a.aprendiz_idaprendiz = ap.idaprendiz ORDER BY a.fecha_asistencia DESC, ap.apellidos_aprendiz, ap.nombres_aprendiz');
@@ -21,6 +26,16 @@ export const listarAsistencia = async ()=>{
         console.error("Error al listar Aprendices", error);
         return[];
     }
+}
 
-
+export const listarTiposAsistencia = async (): Promise<tipo_asistencia[]> => {
+    try {
+        const result = await Conexion.query(
+            'SELECT idtipo_asistencia, nombre_tipo_asistencia tipo_asistencia'
+        );
+        return result as tipo_asistencia[];
+    } catch (error) {
+        console.error("Error al listar tipos de asistencia", error);
+        return [];
+    }
 }

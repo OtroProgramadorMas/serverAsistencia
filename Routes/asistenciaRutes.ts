@@ -6,4 +6,6 @@ const routerAsistencia = new Router();
 
 routerAsistencia.get("/asistencia",authMiddleware,getAsistencia);
 
+routerAsistencia.get("/tipo_asistencia", authMiddleware, getAsistencia)
+
 export default routerAsistencia;
