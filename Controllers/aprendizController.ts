@@ -78,17 +78,22 @@ export const AprendicesByIdFicha = async (ctx: any) => {
       return;
     }
 
-    const funcionario = aprendices.find((aprendiz_activo) => aprendiz_activo.ficha_idFicha === id);
+    const aprendicesFicha = aprendices.filter(
+      (aprendiz) => aprendiz.ficha_idFicha === id
+    );
 
-    if (!funcionario) {
+    if (!aprendicesFicha || aprendicesFicha.length === 0) {
       response.status = 404;
-      response.body = { success: false, msg: "Funcionario no encontrado" };
+      response.body = { success: false, msg: "No se encontraron aprendices para esta ficha" };
       return;
     }
 
+    // Añadimos la respuesta exitosa que faltaba
+    response.status = 200;
+    response.body = { success: true, aprendices: aprendicesFicha };
 
   } catch (error) {
-    console.error("Error en findAprendizById:", error);
+    console.error("Error en AprendicesByIdFicha:", error);
     response.status = 500;
     response.body = { success: false, msg: "Error interno del servidor" };
   }
