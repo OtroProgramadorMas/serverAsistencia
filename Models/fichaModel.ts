@@ -2,7 +2,7 @@ import { Conexion } from "./conexion.ts";
 
 export interface Ficha {
   idficha?: number;
-  codigo: string;
+  codigo_ficha: string;
   fecha_inicio: string;
   programa_idprograma: number;
   estado_ficha_idestado_ficha: number;
@@ -10,7 +10,7 @@ export interface Ficha {
 
 export interface Ficha_Asignacion_Estado {
   idficha?: number;
-  codigo: string;
+  codigo_ficha: string;
   fecha_inicio: string;
   programa_idprograma: number;
   estado_ficha_idestado_ficha: number;
@@ -121,7 +121,7 @@ export const crearFicha = async (ficha: Ficha) => {
     const result = await Conexion.query(
       `INSERT INTO ficha (codigo, fecha_inicio, programa_idprograma, estado_ficha_idestado_ficha)
        VALUES (?, ?, ?, ?)`,
-      [ficha.codigo, ficha.fecha_inicio, ficha.programa_idprograma, ficha.estado_ficha_idestado_ficha]
+      [ficha.codigo_ficha, ficha.fecha_inicio, ficha.programa_idprograma, ficha.estado_ficha_idestado_ficha]
     );
 
     if (result?.affectedRows > 0) {
@@ -142,9 +142,9 @@ export const actualizarFicha = async (idficha: number, ficha: Partial<Ficha>) =>
     const updateFields = [];
     const values = [];
 
-    if (ficha.codigo) {
-      updateFields.push("codigo = ?");
-      values.push(ficha.codigo);
+    if (ficha.codigo_ficha) {
+      updateFields.push("codigo_ficha = ?");
+      values.push(ficha.codigo_ficha);
     }
 
     if (ficha.fecha_inicio) {
