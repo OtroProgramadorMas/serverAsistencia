@@ -52,7 +52,7 @@ export const crearAsistencia = async (
         aprendiz_idaprendiz
       ) VALUES (?, ?, ?)
     `;
-    
+    //insert INTO programa (codigo_programa, nombre_programa) values (2824302,'Dibujo y modelado')
     const result = await Conexion.query(query, [fecha, idTipoAsistencia, idAprendiz]);
     return { success: true, id: result.lastInsertId };
   } catch (error) {

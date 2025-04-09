@@ -9,12 +9,12 @@ Content-Type: application/json
     "tipo":"aprendiz"
 }
 
+###
 
-### Login Funcionario
-
-GET http://localhost:8000/funcionarios/1
+GET http://localhost:8000/fichas/1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJKdWFuIEV4dHJhIiwiZXhwIjoxNzQzODIzMzE1fQ.c1Ua-DjQ-BRKkPbUbIcL7P_hdYCBZNdnDrDgQUcJJkA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIiwiZXhwIjoxNzQzNzk2OTExfQ.sg-dMCQBiAGrUc7-DwBjaWOLJIbCQKkLBqF0NAzpzGk
+
 ### Asistencia
  GET  http://localhost:8000/asistencia
 Content-Type: application/json
@@ -61,3 +61,11 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJKdWFuI
 DELETE http://localhost:8000/asistencia/5
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJKdWFuIEV4dHJhIiwiZXhwIjoxNzQzODIzMzE1fQ.c1Ua-DjQ-BRKkPbUbIcL7P_hdYCBZNdnDrDgQUcJJkA
+
+
+
+### Api rest Sebastian
+GET http://localhost:8000/programas
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIiwiZXhwIjoxNzQ0MDYzOTUxfQ.q5p9s-DmD2Q0gQlC4azxO4sVwzCgZaXbtVIVFIoata8
+
