@@ -1,5 +1,10 @@
+###
 
-/// Funcionario
+GET http://localhost:8000/fichas/programa/1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIiwiZXhwIjoxNzQ0MjM5MzExfQ.1bYbBWeEV74hGTpfGlZhtT32LL6gJsy8cqczgHLU-Ss
+
+###
 
 GET http://localhost:8000/func_instructores/
 Content-Type: application/json
