@@ -14,17 +14,17 @@ Content-Type: application/json
 
 GET http://localhost:8000/funcionarios/1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIiwiZXhwIjoxNzQzNzE3Nzk0fQ.uLYxlbFco-6peRvbvzLoYAktCZtFWqCjjEdw1WWQlSQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIiwiZXhwIjoxNzQ0MjI5OTkwfQ.IgpZRhR7xAE4WCrzf46O7VOi0JiNpMHWeXFqO3OpYrc
 
 ### adfa
 
 GET http://localhost:8000/fichas/1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIiwiZXhwIjoxNzQzNzk2OTExfQ.sg-dMCQBiAGrUc7-DwBjaWOLJIbCQKkLBqF0NAzpzGk
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIiwiZXhwIjoxNzQ0MjI5OTkwfQ.IgpZRhR7xAE4WCrzf46O7VOi0JiNpMHWeXFqO3OpYrc
 ### Asistencia
  GET  http://localhost:8000/asistencia
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJKdWFuIEV4dHJhIiwiZXhwIjoxNzQzODIzMzE1fQ.c1Ua-DjQ-BRKkPbUbIcL7P_hdYCBZNdnDrDgQUcJJkA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIiwiZXhwIjoxNzQ0MjI5OTkwfQ.IgpZRhR7xAE4WCrzf46O7VOi0JiNpMHWeXFqO3OpYrc
 
 
 ### Obtener Aprendiz por ID
@@ -83,3 +83,55 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjb
   "codigo_programa": 2244302,
   "nombre_programa": "Artes"
 }
+
+### Api traer los tipos de documentos 
+GET  http://localhost:8000/tipoDocumento
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIiwiZXhwIjoxNzQ0MjMwODg5fQ.jqDsdOCiUD8qaGEPTASWvbqsFjqXRbR5pyjjbcvq8Mo
+
+### Obtener todos los administradores
+GET http://localhost:8000/administradores
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIiwiZXhwIjoxNzQ0MjI5OTkwfQ.IgpZRhR7xAE4WCrzf46O7VOi0JiNpMHWeXFqO3OpYrc
+
+### Obtener administrador por ID
+GET http://localhost:8000/administradores/1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIiwiZXhwIjoxNzQ0MjI5OTkwfQ.IgpZRhR7xAE4WCrzf46O7VOi0JiNpMHWeXFqO3OpYrc
+
+### Crear nuevo administrador
+POST http://localhost:8000/administradores
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIiwiZXhwIjoxNzQ0MjI5OTkwfQ.IgpZRhR7xAE4WCrzf46O7VOi0JiNpMHWeXFqO3OpYrc
+
+{
+  "nombre": "Carlos",
+  "apellido": "Rodríguez",
+  "idtipo_documento": 1,
+  "documento": "1098765432",
+  "telefono": "3156789012",
+  "email": "carlos@example.com",
+  "password": "clave123",
+  "rol": "Administrador",
+  "imagen": null
+}
+
+### Actualizar administrador existente
+PUT http://localhost:8000/administradores/3
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIiwiZXhwIjoxNzQ0MjI5OTkwfQ.IgpZRhR7xAE4WCrzf46O7VOi0JiNpMHWeXFqO3OpYrc
+
+{
+  "nombre": "Carlos",
+  "apellido": "Rodríguez Pérez",
+  "idtipo_documento": 1,
+  "documento": "1098765432",
+  "telefono": "3156789012",
+  "email": "carlos@example.com",
+  "rol": "Administrador"
+}
+
+### Eliminar administrador
+DELETE http://localhost:8000/administradores/3
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIiwiZXhwIjoxNzQ0MjI5OTkwfQ.IgpZRhR7xAE4WCrzf46O7VOi0JiNpMHWeXFqO3OpYrc

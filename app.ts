@@ -9,6 +9,8 @@ import routerAsistencia from "./Routes/asistenciaRutes.ts";
 import RouterAprendiz from "./Routes/aprendizRoutes.ts";
 import routerHistorial from "./Routes/historialRoutes.ts";
 import routerPrograma from "./Routes/programasRoutes.ts";
+import routerTipoDoc  from "./Routes/tipoDocumentoRoutes.ts";
+import routerAdmin from "./Routes/adminRouters.ts";
 
 // Imagenes
 import { uploadImageMiddleware } from "./Middlewares/uploadFile.ts";
@@ -35,7 +37,9 @@ const Routes = [
   RouterAprendiz,
   routerHistorial,
   routerPrograma,
-  uploadRouter
+  uploadRouter,
+  routerTipoDoc,
+  routerAdmin
 ];
 Routes.forEach((router) => {
   app.use(router.routes());
