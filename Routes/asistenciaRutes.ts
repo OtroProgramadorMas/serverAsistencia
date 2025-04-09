@@ -8,7 +8,7 @@ import {
   deleteAsistencia,
   checkAsistenciasByFechaAndFicha,
   createAsistenciasMasivas,
-  updateAsistenciasMasivas
+  updateAsistenciasMasivas,
 } from "../Controllers/asistenciasControllers.ts";
 import { authMiddleware } from "../Middlewares/authMiddleware.ts";
 
@@ -43,6 +43,8 @@ routerAsistencia.post("/asistencia/verificar", authMiddleware, checkAsistenciasB
 routerAsistencia.post("/asistencia/masiva", authMiddleware, createAsistenciasMasivas);
 
 // Actualizar asistencias masivas
-routerAsistencia.put("/asistencia/masiva", authMiddleware, updateAsistenciasMasivas);
+routerAsistencia.put("/asistencias/masiva", authMiddleware, updateAsistenciasMasivas);
+
+
 
 export default routerAsistencia;

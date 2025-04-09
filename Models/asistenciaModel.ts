@@ -88,6 +88,9 @@ export const listarAsistenciasPorAprendiz = async (idAprendiz: number): Promise<
     }
 };
 
+
+
+
 // Crear nueva asistencia individual
 export const crearAsistencia = async (
     idAprendiz: number,

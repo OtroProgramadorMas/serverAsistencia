@@ -90,6 +90,7 @@ export const getAsistenciasByAprendizId = async (ctx: any) => {
   }
 };
 
+
 // Crear nueva asistencia
 export const createAsistencia = async (ctx: any) => {
   const { request, response } = ctx;
@@ -145,6 +146,8 @@ export const createAsistencia = async (ctx: any) => {
 export const updateAsistencia = async (ctx: any) => {
   const { params, request, response } = ctx;
   
+console.log("update chiquito");
+
   try {
     const idAsistencia = Number(params.id);
     
@@ -326,6 +329,8 @@ export const createAsistenciasMasivas = async (ctx: any) => {
 export const updateAsistenciasMasivas = async (ctx: any) => {
   const { request, response } = ctx;
   
+  console.log("update masivo");
+
   try {
     if (!request.hasBody) {
       response.status = 400;
