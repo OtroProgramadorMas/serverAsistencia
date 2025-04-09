@@ -5,4 +5,6 @@ export const Conexion = await new Client().connect({
     username: "root",
     password: "",
     db: "edu_sena",
+    poolSize: 10, 
+    timeout: 60000 
 });
