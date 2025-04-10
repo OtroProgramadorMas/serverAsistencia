@@ -25,6 +25,8 @@ export interface Ficha_Estado {
   // estado ficha
   idestado_ficha: number | null;
   estado_ficha: string;
+  //
+  nombre_programa: string;
 }
 
 export const listarFichas_Estados_Asignacion = async (): Promise<
@@ -48,13 +50,15 @@ export const listarFichas_Estados_Asignacion = async (): Promise<
   }
 };
 
-export const listarFichasEstado = async (): Promise<Ficha_Estado[]> => {
+export const listarFichasActivas = async (): Promise<Ficha_Estado[]> => {
   try {
     const rows = await Conexion.query(
-      `SELECT f.*, e.*
+      `SELECT f.*, e.*, p.nombre_programa
        FROM ficha f
        INNER JOIN estado_ficha e 
          ON e.idestado_ficha = f.estado_ficha_idestado_ficha
+        INNER JOIN programa p
+         ON f.programa_idprograma = idprograma
        WHERE e.estado_ficha = 'Inducción' OR e.estado_ficha = 'Ejecución'`,
     );
 

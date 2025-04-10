@@ -20,7 +20,7 @@ routerHistorial.get("/asistencia/aprendiz/:id", authMiddleware, getAsistenciasBy
 routerHistorial.post("/asistencia", authMiddleware, createAsistencia);
 
 // Actualizar 
-routerHistorial.put("/asistencia/:id", authMiddleware, updateAsistencia);
+//routerHistorial.put("/asistencia/:id", authMiddleware, updateAsistencia);
 
 // Eliminar 
 routerHistorial.delete("/asistencia/:id", authMiddleware, deleteAsistencia);

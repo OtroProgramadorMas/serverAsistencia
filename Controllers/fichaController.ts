@@ -1,6 +1,6 @@
 // deno-lint-ignore-file no-explicit-any
 import { listarFichas_Estados_Asignacion } from "../Models/fichaModel.ts";
-import { listarFichasEstado } from "../Models/fichaModel.ts";
+import { listarFichasActivas } from "../Models/fichaModel.ts";
 
 export const fichasByIdfunc = async (ctx: any) => {
   const { response, params } = ctx;
@@ -60,7 +60,7 @@ export const fichaById = async (ctx: any) => {
       return;
     }
 
-    const fichas = await listarFichasEstado();
+    const fichas = await listarFichasActivas();
 
     if (!fichas || fichas.length === 0) {
       response.status = 404;

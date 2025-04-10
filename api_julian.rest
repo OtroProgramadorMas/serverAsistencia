@@ -2,6 +2,19 @@ GET http://localhost:8000/fichas/1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIiwiZXhwIjoxNzQ0MDY2MzgxfQ.CJZvt6qJOq3WdAoncei9VGvwhVXUC5h3EZG4kj8iwBk
 ### 
-GET http://localhost:8000/aprendiz_ficha/1
+PUT http://localhost:8000/asistencias/masiva
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIiwiZXhwIjoxNzQ0MTI4NjI4fQ.SP5PZliH6qf7k6jtBAWomb0wKMoEPhDa-wHMfLW6GeI
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIiwiZXhwIjoxNzQ0MjI2NTI2fQ.5WjyMzoMw7O4hUk4M49hRIDNo3zf3LkREjYhop69riM
+
+{
+    "asistencias": [
+        {
+            "idAprendiz": 1,
+            "idTipoAsistencia": 2
+        }
+    ],
+    "fecha": "2025-04-08"
+}
+
+###
+
