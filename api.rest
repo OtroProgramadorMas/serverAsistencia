@@ -133,4 +133,14 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjb
 ### Eliminar administrador
 DELETE http://localhost:8000/administradores/3
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIiwiZXhwIjoxNzQ0MjU5NTE1fQ.O1GgnpJJbYlJat0bq1Vu1SqYEI7n79hCjzkj1KDdZOc
+
+### Obtener Aprendices
+GET http://localhost:8000/AgregarAprendices
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIiwiZXhwIjoxNzQ0MzAzNDk2fQ.gyzEKlFmzvkD2reacXCxlPGDawm38pkR88OMbUj1IAQ
+
+### Agregar Aprendiz
+POST http://localhost:8000/upload-excel
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIiwiZXhwIjoxNzQ0MzA1OTM4fQ.Zczops_SzmccGid16N7T9VFDhcOfayIRkIsOeygMuTY
+

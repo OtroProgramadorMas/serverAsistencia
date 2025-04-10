@@ -159,7 +159,7 @@ export const createFicha = async (ctx: any) => {
     }
 
     const result = await crearFicha({
-      codigo: body.codigo,
+      codigo_ficha: body.codigo,
       fecha_inicio: body.fecha_inicio,
       programa_idprograma: body.programa_idprograma,
       estado_ficha_idestado_ficha: body.estado_ficha_idestado_ficha
@@ -221,7 +221,7 @@ export const updateFicha = async (ctx: any) => {
 
     // Actualizar la ficha
     const result = await actualizarFicha(idficha, {
-      codigo: body.codigo,
+      codigo_ficha: body.codigo,
       fecha_inicio: body.fecha_inicio,
       programa_idprograma: body.programa_idprograma,
       estado_ficha_idestado_ficha: body.estado_ficha_idestado_ficha
