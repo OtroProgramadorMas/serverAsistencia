@@ -119,7 +119,7 @@ Create Update y Delete
 export const crearFicha = async (ficha: Ficha) => {
   try {
     const result = await Conexion.query(
-      `INSERT INTO ficha (codigo, fecha_inicio, programa_idprograma, estado_ficha_idestado_ficha)
+      `INSERT INTO ficha (codigo_ficha, fecha_inicio, programa_idprograma, estado_ficha_idestado_ficha)
        VALUES (?, ?, ?, ?)`,
       [ficha.codigo_ficha, ficha.fecha_inicio, ficha.programa_idprograma, ficha.estado_ficha_idestado_ficha]
     );
