@@ -18,11 +18,13 @@ RouterFicha
     .get("/fichas/:func_id", authMiddleware, fichasByIdfunc)
     .get("/fichas/programa/:programa_id", authMiddleware, getFichasPorPrograma)
     .get("/fichas/:id", authMiddleware, getFichaPorId)
-    .get("/estados-ficha", authMiddleware, getEstadosFicha)
+    .get("/estados_ficha", authMiddleware, getEstadosFicha)
+
+
+    // CUD
     .post("/fichas", authMiddleware, createFicha)
     .put("/fichas/:id", authMiddleware, updateFicha)
     .delete("/fichas/:id", authMiddleware, deleteFicha)
-
 
     // Asignar Instructores 
     .post("/fichas/:id/asignar-instructor", authMiddleware, asignarInstructor)
