@@ -1,214 +1,323 @@
-// adminModel.ts
+// funcionarioModel.ts
 import { Conexion } from "./conexion.ts";
 
-export interface Administrador {
-  id_administrador?: number;
-  nombre: string;
-  apellido: string;
-  idtipo_documento: number;
+export interface Funcionario {
+  idfuncionario?: number;
   documento: string;
-  telefono: string;
+  nombres: string;
+  apellidos: string;
   email: string;
-  password?: string;
-  rol: string;
-  imagen?: string;
+  telefono: string;
+  url_imgfuncionario?: string;
+  password: string;
+  tipo_documento_idtipo_documento: number;
 }
 
-export const listarAdministradores = async () => {
+export const listarFuncionarios = async () => {
   try {
     const query = `
-      SELECT a.id_administrador, a.nombre, a.apellido, a.idtipo_documento, 
-             t.tipo_documento, a.documento, a.telefono, a.email, a.rol, a.imagen
-      FROM administradores a
-      JOIN tipo_documento t ON a.idtipo_documento = t.idtipo_documento
-      ORDER BY a.id_administrador ASC
-    `;
+  SELECT f.idfuncionario, f.documento, f.nombres, f.apellidos, 
+         f.email, f.telefono, f.url_imgfuncionario, td.tipo_documento,
+         tf.tipo_funcionario, f.tipo_documento_idtipo_documento
+  FROM funcionario f
+  LEFT JOIN tipo_documento td ON f.tipo_documento_idtipo_documento = td.idtipo_documento
+  INNER JOIN funcionario_has_tipo_funcionario fhtf ON f.idfuncionario = fhtf.funcionario_idfuncionario
+  INNER JOIN tipo_funcionario tf ON fhtf.tipo_funcionario_idtipo_funcionario = tf.idtipo_funcionario
+  WHERE tf.idtipo_funcionario = 1
+  ORDER BY f.idfuncionario ASC
+`;
     const result = await Conexion.query(query);
     return result;
   } catch (error) {
-    console.error("Error al listar administradores", error);
+    console.error("Error al listar funcionarios", error);
     return [];
   }
 };
-
-export const obtenerAdministradorPorId = async (id: number) => {
+export const obtenerNuevoIdFuncionario = async () => {
   try {
     const query = `
-      SELECT a.id_administrador, a.nombre, a.apellido, a.idtipo_documento, 
-             t.tipo_documento, a.documento, a.telefono, a.email, a.rol, a.imagen
-      FROM administradores a
-      JOIN tipo_documento t ON a.idtipo_documento = t.idtipo_documento
-      WHERE a.id_administrador = ?
+      SELECT MAX(idfuncionario) AS maximo_id
+      FROM funcionario
+    `;
+    const result = await Conexion.query(query);
+    const maximoId = result[0].maximo_id || 0;
+    const nuevoId = maximoId + 1;
+    
+    console.log("Nuevo ID de funcionario disponible:", nuevoId);
+    
+    return nuevoId;
+  } catch (error) {
+    console.error("Error al obtener nuevo ID de funcionario", error);
+    throw error;
+  }
+};
+
+export const obtenerFuncionarioPorId = async (id: number) => {
+  try {
+    const query = `
+      SELECT f.idfuncionario, f.documento, f.nombres, f.apellidos, 
+             f.email, f.telefono, f.url_imgfuncionario, f.tipo_documento_idtipo_documento,
+             td.tipo_documento, tf.tipo_funcionario, tf.idtipo_funcionario
+      FROM funcionario f
+      JOIN tipo_documento td ON f.tipo_documento_idtipo_documento = td.idtipo_documento
+      JOIN funcionario_has_tipo_funcionario fhtf ON f.idfuncionario = fhtf.funcionario_idfuncionario
+      JOIN tipo_funcionario tf ON fhtf.tipo_funcionario_idtipo_funcionario = tf.idtipo_funcionario
+      WHERE f.idfuncionario = ?
     `;
     const result = await Conexion.query(query, [id]);
     return result.length > 0 ? result[0] : null;
   } catch (error) {
-    console.error(`Error al obtener administrador con ID ${id}`, error);
+    console.error(`Error al obtener funcionario con ID ${id}`, error);
     return null;
   }
 };
 
-export const crearAdministrador = async (admin: Administrador) => {
+export const crearFuncionario = async (funcionario: Funcionario) => {
   try {
+    // Iniciar transacción
+    await Conexion.query("START TRANSACTION");
+    
     // Verificar si el email ya existe
     const checkEmail = await Conexion.query(
-      "SELECT id_administrador FROM administradores WHERE email = ?",
-      [admin.email]
+      "SELECT idfuncionario FROM funcionario WHERE email = ?",
+      [funcionario.email]
     );
     
     if (checkEmail.length > 0) {
+      await Conexion.query("ROLLBACK");
       return { success: false, message: "El email ya está registrado" };
     }
     
     // Verificar si el documento ya existe
     const checkDocumento = await Conexion.query(
-      "SELECT id_administrador FROM administradores WHERE documento = ? AND idtipo_documento = ?",
-      [admin.documento, admin.idtipo_documento]
+      "SELECT idfuncionario FROM funcionario WHERE documento = ? AND tipo_documento_idtipo_documento = ?",
+      [funcionario.documento, funcionario.tipo_documento_idtipo_documento]
     );
     
     if (checkDocumento.length > 0) {
+      await Conexion.query("ROLLBACK");
       return { success: false, message: "El documento ya está registrado" };
     }
     
+    // Obtener el nuevo ID de funcionario
+    const nuevoId = await obtenerNuevoIdFuncionario();
+    
+    // Insertar en la tabla funcionario con el ID específico
     const query = `
-      INSERT INTO administradores (
-        nombre, apellido, idtipo_documento, documento, 
-        telefono, email, password, rol, imagen
+      INSERT INTO funcionario (
+        idfuncionario, documento, nombres, apellidos, email, telefono, 
+        url_imgfuncionario, password, tipo_documento_idtipo_documento
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
     
     // En una aplicación real, deberías hashear la contraseña antes de guardarla
-    // Por ejemplo: const hashedPassword = await bcrypt.hash(admin.password, 10);
     
     const result = await Conexion.query(query, [
-      admin.nombre,
-      admin.apellido,
-      admin.idtipo_documento,
-      admin.documento,
-      admin.telefono,
-      admin.email,
-      admin.password || "defaultPassword", // En un caso real, sería el hash
-      admin.rol,
-      admin.imagen || null
+      nuevoId,
+      funcionario.documento,
+      funcionario.nombres,
+      funcionario.apellidos,
+      funcionario.email,
+      funcionario.telefono,
+      funcionario.url_imgfuncionario || null,
+      funcionario.password,
+      funcionario.tipo_documento_idtipo_documento
     ]);
     
     if (result && result.affectedRows > 0) {
-      return { 
-        success: true, 
-        message: "Administrador creado exitosamente", 
-        id: result.insertId 
-      };
+      // Insertar en la tabla funcionario_has_tipo_funcionario con el mismo ID y password
+      const relacionQuery = `
+        INSERT INTO funcionario_has_tipo_funcionario (
+          funcionario_idfuncionario, tipo_funcionario_idtipo_funcionario, password
+        ) VALUES (?, 1, ?)
+      `;
+      
+      const relacionResult = await Conexion.query(relacionQuery, [nuevoId, funcionario.password]);
+      
+      if (relacionResult && relacionResult.affectedRows > 0) {
+        await Conexion.query("COMMIT");
+        return { 
+          success: true, 
+          message: "Funcionario creado exitosamente", 
+          id: nuevoId 
+        };
+      } else {
+        await Conexion.query("ROLLBACK");
+        return { success: false, message: "No se pudo crear la relación de tipo de funcionario" };
+      }
     } else {
-      return { success: false, message: "No se pudo crear el administrador" };
+      await Conexion.query("ROLLBACK");
+      return { success: false, message: "No se pudo crear el funcionario" };
     }
   } catch (error) {
-    console.error("Error al crear administrador", error);
-    return { success: false, message: "Error al crear administrador" };
+    await Conexion.query("ROLLBACK");
+    console.error("Error al crear funcionario", error);
+    return { success: false, message: "Error al crear funcionario" };
   }
 };
-
-export const actualizarAdministrador = async (id: number, admin: Administrador) => {
+export const actualizarFuncionario = async (id: number, funcionario: Funcionario) => {
   try {
-    // Verificar si existe el administrador
-    const adminExistente = await obtenerAdministradorPorId(id);
-    if (!adminExistente) {
-      return { success: false, message: "Administrador no encontrado" };
+    // Iniciar transacción
+    await Conexion.query("START TRANSACTION");
+    
+    // Verificar si existe el funcionario
+    const funcionarioExistente = await obtenerFuncionarioPorId(id);
+    if (!funcionarioExistente) {
+      await Conexion.query("ROLLBACK");
+      return { success: false, message: "Funcionario no encontrado" };
     }
     
-    // Verificar si el email ya está usado por otro administrador
-    if (admin.email !== adminExistente.email) {
+    // Verificar si el email ya está usado por otro funcionario
+    if (funcionario.email !== funcionarioExistente.email) {
       const checkEmail = await Conexion.query(
-        "SELECT id_administrador FROM administradores WHERE email = ? AND id_administrador != ?",
-        [admin.email, id]
+        "SELECT idfuncionario FROM funcionario WHERE email = ? AND idfuncionario != ?",
+        [funcionario.email, id]
       );
       
       if (checkEmail.length > 0) {
-        return { success: false, message: "El email ya está registrado por otro administrador" };
+        await Conexion.query("ROLLBACK");
+        return { success: false, message: "El email ya está registrado por otro funcionario" };
       }
     }
     
-    // Verificar si el documento ya está usado por otro administrador
-    if (admin.documento !== adminExistente.documento || 
-        admin.idtipo_documento !== adminExistente.idtipo_documento) {
+    // Verificar si el documento ya está usado por otro funcionario
+    if (funcionario.documento !== funcionarioExistente.documento || 
+        funcionario.tipo_documento_idtipo_documento !== funcionarioExistente.tipo_documento_idtipo_documento) {
       const checkDocumento = await Conexion.query(
-        "SELECT id_administrador FROM administradores WHERE documento = ? AND idtipo_documento = ? AND id_administrador != ?",
-        [admin.documento, admin.idtipo_documento, id]
+        "SELECT idfuncionario FROM funcionario WHERE documento = ? AND tipo_documento_idtipo_documento = ? AND idfuncionario != ?",
+        [funcionario.documento, funcionario.tipo_documento_idtipo_documento, id]
       );
       
       if (checkDocumento.length > 0) {
-        return { success: false, message: "El documento ya está registrado por otro administrador" };
+        await Conexion.query("ROLLBACK");
+        return { success: false, message: "El documento ya está registrado por otro funcionario" };
       }
     }
     
     let query = `
-      UPDATE administradores SET 
-        nombre = ?, 
-        apellido = ?, 
-        idtipo_documento = ?, 
+      UPDATE funcionario SET 
         documento = ?, 
-        telefono = ?, 
+        nombres = ?, 
+        apellidos = ?, 
         email = ?, 
-        rol = ?
+        telefono = ?, 
+        tipo_documento_idtipo_documento = ?
     `;
     
     const params = [
-      admin.nombre,
-      admin.apellido,
-      admin.idtipo_documento,
-      admin.documento,
-      admin.telefono,
-      admin.email,
-      admin.rol
+      funcionario.documento,
+      funcionario.nombres,
+      funcionario.apellidos,
+      funcionario.email,
+      funcionario.telefono,
+      funcionario.tipo_documento_idtipo_documento
     ];
     
     // Agregar imagen al update si se proporciona
-    if (admin.imagen) {
-      query += `, imagen = ?`;
-      params.push(admin.imagen);
+    if (funcionario.url_imgfuncionario) {
+      query += `, url_imgfuncionario = ?`;
+      params.push(funcionario.url_imgfuncionario);
     }
     
     // Agregar contraseña al update si se proporciona
-    if (admin.password) {
+    if (funcionario.password) {
       query += `, password = ?`;
       // En una aplicación real, deberías hashear la contraseña
-      // const hashedPassword = await bcrypt.hash(admin.password, 10);
-      params.push(admin.password);
+      // const hashedPassword = await bcrypt.hash(funcionario.password, 10);
+      params.push(funcionario.password);
     }
     
-    query += ` WHERE id_administrador = ?`;
+    query += ` WHERE idfuncionario = ?`;
     params.push(id);
     
     const result = await Conexion.query(query, params);
     
+    // Comprobar si existe la relación en funcionario_has_tipo_funcionario
+    const checkRelacion = await Conexion.query(
+      "SELECT * FROM funcionario_has_tipo_funcionario WHERE funcionario_idfuncionario = ?",
+      [id]
+    );
+    
+    // Si no existe la relación, crearla
+    if (checkRelacion.length === 0) {
+      const relacionQuery = `
+        INSERT INTO funcionario_has_tipo_funcionario (
+          funcionario_idfuncionario, tipo_funcionario_idtipo_funcionario
+        ) VALUES (?, 1)
+      `;
+      
+      await Conexion.query(relacionQuery, [id]);
+    }
+    
+    await Conexion.query("COMMIT");
+    
     if (result && result.affectedRows > 0) {
-      return { success: true, message: "Administrador actualizado exitosamente" };
+      return { success: true, message: "Funcionario actualizado exitosamente" };
     } else {
-      return { success: false, message: "No se pudo actualizar el administrador" };
+      return { success: false, message: "No se pudo actualizar el funcionario" };
     }
   } catch (error) {
-    console.error(`Error al actualizar administrador con ID ${id}`, error);
-    return { success: false, message: "Error al actualizar administrador" };
+    await Conexion.query("ROLLBACK");
+    console.error(`Error al actualizar funcionario con ID ${id}`, error);
+    return { success: false, message: "Error al actualizar funcionario" };
   }
 };
 
-export const eliminarAdministrador = async (id: number) => {
+export const eliminarFuncionario = async (id: number) => {
   try {
-    // Verificar si existe el administrador
-    const adminExistente = await obtenerAdministradorPorId(id);
-    if (!adminExistente) {
-      return { success: false, message: "Administrador no encontrado" };
+    // Iniciar transacción
+    await Conexion.query("START TRANSACTION");
+    
+    // Verificar si existe el funcionario
+    const funcionarioExistente = await obtenerFuncionarioPorId(id);
+    if (!funcionarioExistente) {
+      await Conexion.query("ROLLBACK");
+      return { success: false, message: "Funcionario no encontrado" };
     }
     
-    const query = "DELETE FROM administradores WHERE id_administrador = ?";
-    const result = await Conexion.query(query, [id]);
+    // Eliminar registros de la tabla de relación primero
+    const deleteRelacionQuery = "DELETE FROM funcionario_has_tipo_funcionario WHERE funcionario_idfuncionario = ?";
+    await Conexion.query(deleteRelacionQuery, [id]);
+    
+    // Eliminar el funcionario
+    const deleteQuery = "DELETE FROM funcionario WHERE idfuncionario = ?";
+    const result = await Conexion.query(deleteQuery, [id]);
+    
+    await Conexion.query("COMMIT");
     
     if (result && result.affectedRows > 0) {
-      return { success: true, message: "Administrador eliminado exitosamente" };
+      return { success: true, message: "Funcionario eliminado exitosamente" };
     } else {
-      return { success: false, message: "No se pudo eliminar el administrador" };
+      return { success: false, message: "No se pudo eliminar el funcionario" };
     }
   } catch (error) {
-    console.error(`Error al eliminar administrador con ID ${id}`, error);
-    return { success: false, message: "Error al eliminar administrador" };
+    await Conexion.query("ROLLBACK");
+    console.error(`Error al eliminar funcionario con ID ${id}`, error);
+    return { success: false, message: "Error al eliminar funcionario" };
+  }
+};
+
+// Función para buscar funcionarios por documento, nombre o apellido
+export const buscarFuncionarios = async (termino: string) => {
+  try {
+    const query = `
+      SELECT f.idfuncionario, f.documento, f.nombres, f.apellidos, 
+             f.email, f.telefono, f.url_imgfuncionario, td.tipo_documento,
+             tf.tipo_funcionario
+      FROM funcionario f
+      JOIN tipo_documento td ON f.tipo_documento_idtipo_documento = td.idtipo_documento
+      JOIN funcionario_has_tipo_funcionario fhtf ON f.idfuncionario = fhtf.funcionario_idfuncionario
+      JOIN tipo_funcionario tf ON fhtf.tipo_funcionario_idtipo_funcionario = tf.idtipo_funcionario
+      WHERE f.documento LIKE ? OR f.nombres LIKE ? OR f.apellidos LIKE ?
+      ORDER BY f.idfuncionario ASC
+    `;
+    
+    const terminoBusqueda = `%${termino}%`;
+    const result = await Conexion.query(query, [terminoBusqueda, terminoBusqueda, terminoBusqueda]);
+    
+    return result;
+  } catch (error) {
+    console.error("Error al buscar funcionarios", error);
+    return [];
   }
 };

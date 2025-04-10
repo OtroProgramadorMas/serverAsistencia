@@ -1,22 +1,23 @@
-// adminRoutes.ts
+// adminRouters.ts
 import { Router } from "../Dependencies/dependencias.ts";
 import { 
-  getAdministradores, 
-  getAdministradorPorId, 
-  createAdministrador, 
-  updateAdministrador, 
-  deleteAdministrador 
+  getAdministradores,
+  getAdministradorPorId,
+  createAdministrador,
+  updateAdministrador,
+  deleteAdministrador,
+  buscarAdministrador
 } from "../Controllers/adminController.ts";
-import { authMiddleware } from "../Middlewares/authMiddleware.ts";
 
-const routerAdmin = new Router();
+const router = new Router();
 
-// Rutas para administradores
-routerAdmin
-  .get("/administradores", authMiddleware, getAdministradores)
-  .get("/administradores/:id", authMiddleware, getAdministradorPorId)
-  .post("/administradores", authMiddleware, createAdministrador)
-  .put("/administradores/:id", authMiddleware, updateAdministrador)
-  .delete("/administradores/:id", authMiddleware, deleteAdministrador);
+// Rutas de Administradores
+router
+  .get("/administradores", getAdministradores)
+  .get("/administradores/buscar/:termino", buscarAdministrador)
+  .get("/administradores/:id", getAdministradorPorId)
+  .post("/administradores", createAdministrador)
+  .put("/administradores/:id", updateAdministrador)
+  .delete("/administradores/:id", deleteAdministrador);
 
-export default routerAdmin;
+export default router;

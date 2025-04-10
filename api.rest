@@ -92,17 +92,17 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjb
 ### Obtener todos los administradores
 GET http://localhost:8000/administradores
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIiwiZXhwIjoxNzQ0MjI5OTkwfQ.IgpZRhR7xAE4WCrzf46O7VOi0JiNpMHWeXFqO3OpYrc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIiwiZXhwIjoxNzQ0MzAzNDYwfQ.QnGpeneh_of7xRB7qQNX2bVSNFFql19Gt_Y2wuYc6so
 
 ### Obtener administrador por ID
 GET http://localhost:8000/administradores/1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIiwiZXhwIjoxNzQ0MjI5OTkwfQ.IgpZRhR7xAE4WCrzf46O7VOi0JiNpMHWeXFqO3OpYrc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIiwiZXhwIjoxNzQ0MjY4NDIwfQ.Q9nFmBTpTxznaplrnUMEjneQ_2UqkO-zS9MPFF7xLII
 
 ### Crear nuevo administrador
 POST http://localhost:8000/administradores
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIiwiZXhwIjoxNzQ0MjI5OTkwfQ.IgpZRhR7xAE4WCrzf46O7VOi0JiNpMHWeXFqO3OpYrc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIiwiZXhwIjoxNzQ0MjU5NTE1fQ.O1GgnpJJbYlJat0bq1Vu1SqYEI7n79hCjzkj1KDdZOc
 
 {
   "nombre": "Carlos",
@@ -119,8 +119,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjb
 ### Actualizar administrador existente
 PUT http://localhost:8000/administradores/3
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIiwiZXhwIjoxNzQ0MjI5OTkwfQ.IgpZRhR7xAE4WCrzf46O7VOi0JiNpMHWeXFqO3OpYrc
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIiwiZXhwIjoxNzQ0MjU5NTE1fQ.O1GgnpJJbYlJat0bq1Vu1SqYEI7n79hCjzkj1KDdZOc
 {
   "nombre": "Carlos",
   "apellido": "Rodríguez Pérez",
@@ -134,4 +133,4 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjb
 ### Eliminar administrador
 DELETE http://localhost:8000/administradores/3
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIiwiZXhwIjoxNzQ0MjI5OTkwfQ.IgpZRhR7xAE4WCrzf46O7VOi0JiNpMHWeXFqO3OpYrc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIiwiZXhwIjoxNzQ0MjU5NTE1fQ.O1GgnpJJbYlJat0bq1Vu1SqYEI7n79hCjzkj1KDdZOc
