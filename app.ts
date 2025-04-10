@@ -14,6 +14,9 @@ import { Conexion } from "./Models/conexion.ts";
 import { crearTablaCodigosRecuperacion } from "./Models/passwordRecoveryModel.ts";
 import RouterFicha from "./Routes/fichaRoutes.ts";
 import routerPrograma from "./Routes/programasRoutes.ts";
+import routerTipoDoc  from "./Routes/tipoDocumentoRoutes.ts";
+import routerAdmin from "./Routes/adminRouters.ts";
+import RouterAgregarAprendiz from "./Routes/agregarAprendizRouter.ts";
 
 // Imagenes
 import { uploadImageMiddleware } from "./Middlewares/uploadFile.ts";
@@ -45,7 +48,10 @@ const Routes = [
   RouterAprendiz,
   routerHistorial,
   routerPrograma,
-  uploadRouter
+  uploadRouter,
+  routerTipoDoc,
+  routerAdmin,
+  RouterAgregarAprendiz
 ];
 Routes.forEach((router) => {
   app.use(router.routes());

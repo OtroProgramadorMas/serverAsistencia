@@ -1,6 +1,26 @@
+###
 
-/// Funcionario
+GET http://localhost:8000/fichas/programa/1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIiwiZXhwIjoxNzQ0MjM5MzExfQ.1bYbBWeEV74hGTpfGlZhtT32LL6gJsy8cqczgHLU-Ss
+
+###
 
 GET http://localhost:8000/func_instructores/
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIiwiZXhwIjoxNzQ0MTQ4NDQyfQ.yBipmx7pWREeSYu0sJjG3qWh6gVWFSnvq3C6fHDH8uM
+
+###
+GET http://localhost:8000/aprendices/ficha/1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIiwiZXhwIjoxNzQ0Mjg5NzM5fQ.5o9sgwfJJm_AlZeDLyHMouR9rXFT1zS5gRt1tNQZZcM
+
+###
+GET http://localhost:8000/tipoDocumento
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIiwiZXhwIjoxNzQ0MjkzNjU2fQ.x6XUzBw36ZrWq8HV3Lx7BbNL_gNw8JXwUM1jnp8yqOY
+
+###
+GET http://localhost:8000/estado_aprendiz
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIiwiZXhwIjoxNzQ0Mjk3NjkyfQ.VLqdcpTPArNZd8Di27Xd1cJ0t_uLq-W4zRQsvrMRRkc

@@ -1,7 +1,7 @@
 // deno-lint-ignore-file
 import { generarToken } from "../Helpers/jwt.ts";
 import { listarFuncionario_Roles } from "../Models/funcModel.ts";
-import { listarAprendiz } from "../Models/aprendizModel.ts";
+import { listarAprendices } from "../Models/aprendizModel.ts";
 
 interface TokenPayload {
   id: number | null;
@@ -46,7 +46,7 @@ export const iniciarSesion = async (ctx: any) => {
         console.log()
       }
     } else if (tipo === "aprendiz") {
-      const aprendices = await listarAprendiz();
+      const aprendices = await listarAprendices();
       if (!Array.isArray(aprendices)) {
         throw new Error("listarAprendiz no devolvió un array");
       }

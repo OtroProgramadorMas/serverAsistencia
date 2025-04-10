@@ -1,14 +1,21 @@
 import { Router } from "../Dependencies/dependencias.ts";
-import {authMiddleware} from "../Middlewares/authMiddleware.ts"
-import { getAllProgramas, createPrograma } from "../Controllers/programaController.ts";
+import { authMiddleware } from "../Middlewares/authMiddleware.ts"
+import { 
+    getAllProgramas, 
+    getProgramaById, 
+    createPrograma, 
+    updatePrograma, 
+    deletePrograma 
+} from "../Controllers/programaController.ts";
 
 const routerPrograma = new Router();
 
-// Ruta para obtener todos los programas
-routerPrograma.get("/programas",authMiddleware, getAllProgramas);
-
-// Ruta para crear un nuevo programa
-routerPrograma.post("/programas",authMiddleware, createPrograma);
+routerPrograma
+  .get("/programas", authMiddleware, getAllProgramas)
+  .get("/programas/:id", authMiddleware, getProgramaById)
+  .post("/programas", authMiddleware, createPrograma)
+  .put("/programas/:id", authMiddleware, updatePrograma)
+  .delete("/programas/:id", authMiddleware, deletePrograma);
 
 
 export default routerPrograma;
