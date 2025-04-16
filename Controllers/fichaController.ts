@@ -1,7 +1,7 @@
 
 // deno-lint-ignore-file no-explicit-any
 import {
-  listarFichasPorEstados,
+  listarFichasActivas,
   listarFichasPorPrograma,
   buscarFichaPorId,
   listarEstadosFicha,
@@ -34,7 +34,7 @@ export const fichasByIdfunc = async (ctx: any) => {
       return;
     }
 
-    const fichas = await  listarFichas_Estados_Asignacion();
+    const fichas = await  listarFichasActivas();
 
     if (!fichas || fichas.length === 0) {
       response.status = 404;

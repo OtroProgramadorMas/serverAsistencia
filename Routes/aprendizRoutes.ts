@@ -16,7 +16,6 @@ const RouterAprendiz = new Router();
 // Ruta para obtener todos los aprendices
 RouterAprendiz.get("/aprendices", authMiddleware, getAllAprendices);
 RouterAprendiz.get("/aprendiz/:id", authMiddleware, findAprendizById);
-RouterAprendiz.get("/aprendiz_ficha/:id", authMiddleware, AprendicesByIdFicha);
 
 // Ruta para buscar aprendices por número de documento
 RouterAprendiz.get("/aprendices/documento/:documento", authMiddleware, findAprendicesByDocumento);

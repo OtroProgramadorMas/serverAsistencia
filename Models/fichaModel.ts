@@ -38,7 +38,7 @@ Read
 
 */
 
-export const listarFichasPorEstados = async (): Promise<Ficha_Asignacion_Estado[]> => {
+export const listarFichasActivas = async (): Promise<Ficha_Asignacion_Estado[]> => {
   try {
     const rows = await Conexion.query(
       `SELECT f.*, e.*, fh.*

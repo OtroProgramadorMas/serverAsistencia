@@ -1,5 +1,5 @@
 // uploadFile.ts - Versión mejorada para Oak v17.1.4
-import { Context } from "../dependencies/dependencias.ts";
+import { Context } from "../Dependencies/dependencias.ts";
 import { ensureDir } from "https://deno.land/std@0.215.0/fs/ensure_dir.ts";
 import { join } from "https://deno.land/std@0.215.0/path/mod.ts";
 

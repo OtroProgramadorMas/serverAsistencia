@@ -1,4 +1,3 @@
-
 // app.ts modificado para incluir la ruta de recuperación de contraseña
 import { Application, Router, oakCors } from "./Dependencies/dependencias.ts";
 import { logData } from "./Middlewares/logData.ts";
@@ -40,13 +39,7 @@ const Routes = [
   RouterAprendiz,
   routerHistorial,
   RouterRecuperarPassword,
-  RouterFunc,
   RouterFicha,
-  RouterLogin,
-  RouterFunc,
-  routerAsistencia,
-  RouterAprendiz,
-  routerHistorial,
   routerPrograma,
   uploadRouter,
   routerTipoDoc,
@@ -59,25 +52,25 @@ Routes.forEach((router) => {
 });
 
 // Inicializar tablas necesarias
-const iniciarDB = async () => {
-  try {
-    // Crear tabla para códigos de recuperación si no existe
-    await crearTablaCodigosRecuperacion();
-    console.log("Base de datos inicializada correctamente");
-  } catch (error) {
-    console.error("Error al inicializar la base de datos:", error);
-  }
-};
-/////////////////////////////////////////////////////////////////////////////////////
-try {
-  const testQuery = "SELECT 1 as test";
-  const result = await Conexion.query(testQuery);
-  console.log("Conexión exitosa a la base de datos:", result);
-} catch (error) {
-  console.error("Error de conexión a la base de datos:", error);
-}
-////////////////////////////////////////////////////////////////////////////////////
-iniciarDB();
+// const iniciarDB = async () => {
+//   try {
+//     // Crear tabla para códigos de recuperación si no existe
+//     await crearTablaCodigosRecuperacion();
+//     console.log("Base de datos inicializada correctamente");
+//   } catch (error) {
+//     console.error("Error al inicializar la base de datos:", error);
+//   }
+// };
+// /////////////////////////////////////////////////////////////////////////////////////
+// try {
+//   const testQuery = "SELECT 1 as test";
+//   const result = await Conexion.query(testQuery);
+//   console.log("Conexión exitosa a la base de datos:", result);
+// } catch (error) {
+//   console.error("Error de conexión a la base de datos:", error);
+// }
+// ////////////////////////////////////////////////////////////////////////////////////
+// iniciarDB();
 
 const puerto = 8000;
 
