@@ -1,15 +1,15 @@
-// app.ts modificado para incluir la ruta de recuperación de contraseña
 import { Application, Router, oakCors } from "./Dependencies/dependencias.ts";
 import { logData } from "./Middlewares/logData.ts";
 
-// Routers
+// login y password recovery
 import { RouterLogin } from "./Routes/loginUsers.ts";
+import { RouterPasswordRecovery } from "./Routes/emailRouters.ts";
+
+// Routers
 import RouterFunc from "./Routes/funcionarioRoutes.ts";
 import routerAsistencia from "./Routes/asistenciaRoutes.ts";
 import RouterAprendiz from "./Routes/aprendizRoutes.ts";
 import RouterRecuperarPassword from "./Routes/passwordRecoveryRoutes.ts";
-import { Conexion } from "./Models/conexion.ts";
-import { crearTablaCodigosRecuperacion } from "./Models/passwordRecoveryModel.ts";
 import RouterFicha from "./Routes/fichaRoutes.ts";
 import routerPrograma from "./Routes/programasRoutes.ts";
 import routerTipoDoc  from "./Routes/tipoDocumentoRoutes.ts";
@@ -33,6 +33,8 @@ uploadRouter.post("/upload", uploadImageMiddleware);
 
 const Routes = [
   RouterLogin, 
+  RouterPasswordRecovery,
+  ///
   RouterFunc, 
   routerAsistencia,
   RouterAprendiz,
