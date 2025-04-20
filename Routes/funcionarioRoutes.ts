@@ -2,15 +2,19 @@ import { Router } from "../Dependencies/dependencias.ts";
 import { authMiddleware } from "../Middlewares/authMiddleware.ts";
 
 import {
-  findFuncionarioById,
-  listarInstructores,
-  crearFuncionarioConRol
+  listarFuncionarios, 
+  listarAdministradores, 
+  listarInstructores, 
+  obtenerFuncionario,
+  listarRoles
 } from "../Controllers/funcionarioController.ts";
 
 const RouterFunc = new Router();
 
-RouterFunc.get("/funcionarios/:id", authMiddleware, findFuncionarioById);
-RouterFunc.get("/func_instructores/", authMiddleware, listarInstructores);
-RouterFunc.post("/funcionarios/", authMiddleware, crearFuncionarioConRol)
+RouterFunc.get("/funcionarios", authMiddleware, listarFuncionarios);
+RouterFunc.get("/funcionarios/administradores", authMiddleware, listarAdministradores);
+RouterFunc.get("/funcionarios/instructores", authMiddleware, listarInstructores);
+RouterFunc.get("/funcionarios/roles", authMiddleware, listarRoles);
+RouterFunc.get("/funcionarios/:id", authMiddleware, obtenerFuncionario);
 
 export default RouterFunc;

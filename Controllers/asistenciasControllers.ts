@@ -3,6 +3,7 @@ import {
   listarAsistencia,
   listarTiposAsistencia,
   listarAsistenciasPorAprendiz,
+  obtenerAsistenciasPorFechaYFicha,
   crearAsistencia,
   actualizarAsistencia,
   eliminarAsistencia,
@@ -57,6 +58,44 @@ export const getTiposAsistencia = async (ctx: any) => {
     response.body = { success: true, tipos };
   } catch (error) {
     console.error("Error en getTiposAsistencia:", error);
+    response.status = 500;
+    response.body = { success: false, msg: "Error interno del servidor" };
+  }
+};
+
+// Obtener asistencias por fecha y ficha
+export const getAsistenciasByFechaAndFicha = async (ctx: any) => {
+  const { request, response } = ctx;
+  
+  try {
+    if (!request.hasBody) {
+      response.status = 400;
+      response.body = { success: false, msg: "No se proporcionaron datos" };
+      return;
+    }
+    
+    const body = await request.body.json();
+    const { fecha, idFicha } = body;
+    
+    if (!fecha || !idFicha) {
+      response.status = 400;
+      response.body = { 
+        success: false, 
+        msg: "Se requiere fecha e idFicha" 
+      };
+      return;
+    }
+    
+    const asistencias = await obtenerAsistenciasPorFechaYFicha(fecha, Number(idFicha));
+    
+    response.status = 200;
+    response.body = { 
+      success: true, 
+      asistencias,
+      total: asistencias.length
+    };
+  } catch (error) {
+    console.error("Error en getAsistenciasByFechaAndFicha:", error);
     response.status = 500;
     response.body = { success: false, msg: "Error interno del servidor" };
   }

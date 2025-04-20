@@ -10,7 +10,6 @@ import {
   listarEstadosAprendiz,
   listarAprendizActivos
 } from "../Models/aprendizModel.ts";
-import { listarEstadosFicha } from "../Models/fichaModel.ts";
 
 export const findAprendizById = async (ctx: any) => {
   const { response, params } = ctx;

@@ -3,6 +3,7 @@ import {
   getAsistencia,
   getTiposAsistencia,
   getAsistenciasByAprendizId,
+  getAsistenciasByFechaAndFicha,
   createAsistencia,
   updateAsistencia,
   deleteAsistencia,
@@ -25,6 +26,8 @@ routerAsistencia.get("/asistencia/tipos", authMiddleware, getTiposAsistencia);
 // Obtener asistencias de un aprendiz específico
 routerAsistencia.get("/asistencia/aprendiz/:id", authMiddleware, getAsistenciasByAprendizId);
 
+routerAsistencia.post("/asistencias/fecha-ficha", authMiddleware, getAsistenciasByFechaAndFicha);
+
 // ===== Operaciones CRUD individuales =====
 // Crear nueva asistencia individual
 routerAsistencia.post("/asistencia", authMiddleware, createAsistencia);
@@ -40,7 +43,7 @@ routerAsistencia.delete("/asistencia/:id", authMiddleware, deleteAsistencia);
 routerAsistencia.post("/asistencia/verificar", authMiddleware, checkAsistenciasByFechaAndFicha);
 
 // Registrar asistencias masivas 
-routerAsistencia.post("/asistencia/masiva", authMiddleware, createAsistenciasMasivas);
+routerAsistencia.post("/asistencias/masiva", authMiddleware, createAsistenciasMasivas);
 
 // Actualizar asistencias masivas
 routerAsistencia.put("/asistencias/masiva", authMiddleware, updateAsistenciasMasivas);
