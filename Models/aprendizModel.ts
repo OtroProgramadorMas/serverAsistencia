@@ -102,11 +102,17 @@ export const obtenerAprendicesPorFicha = async (fichaId: number): Promise<Aprend
     }
     
     const result = await Conexion.query(
-      "SELECT * FROM aprendiz WHERE ficha_idficha = ?", 
+      `SELECT 
+         a.*,
+         td.* 
+       FROM aprendiz a
+       INNER JOIN tipo_documento td 
+         ON a.tipo_documento_idtipo_documento = td.idtipo_documento
+       WHERE a.ficha_idficha = ?`, 
       [fichaId]
     );
     
-    return { success: true, aprendices: result as Aprendiz[] };
+    return { success: true, aprendices: result as (Aprendiz & {tipo_documento: string})[] };
   } catch (error) {
     console.error(`Error al obtener aprendices de la ficha ${fichaId}:`, error);
     return { success: false, msg: "Error al obtener aprendices por ficha", error };

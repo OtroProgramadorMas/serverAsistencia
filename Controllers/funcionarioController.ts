@@ -1,132 +1,167 @@
 // deno-lint-ignore-file no-explicit-any
-import { listarFuncionario_Roles } from "../Models/funcModel.ts"
+import { 
+  listarFuncionariosConRoles,
+  listarFuncionariosPorRol,
+  obtenerFuncionarioPorId,
+  listarTiposFuncionario
+} from "../Models/funcionarioModel.ts";
 
-// Read
+// Listar todos los funcionarios con sus roles
+export const listarFuncionarios = async (ctx: any) => {
+  const { response } = ctx;
 
+  try {
+    const result = await listarFuncionariosConRoles();
+    
+    if (!result.success) {
+      response.status = 500;
+      response.body = { 
+        success: false, 
+        msg: result.message || "Error al obtener funcionarios" 
+      };
+      return;
+    }
+    
+    response.status = 200;
+    response.body = { 
+      success: true, 
+      funcionarios: result.data 
+    };
+  } catch (error) {
+    console.error("Error en listarFuncionarios:", error);
+    response.status = 500;
+    response.body = { success: false, msg: "Error interno del servidor" };
+  }
+};
+
+// Listar funcionarios con rol de administrador
+export const listarAdministradores = async (ctx: any) => {
+  const { response } = ctx;
+
+  try {
+    const result = await listarFuncionariosPorRol("administrador");
+    
+    if (!result.success) {
+      response.status = 500;
+      response.body = { 
+        success: false, 
+        msg: result.message || "Error al obtener administradores" 
+      };
+      return;
+    }
+    
+    if (!result.data || result.data.length === 0) {
+      response.status = 404;
+      response.body = { success: false, msg: "No se encontraron administradores" };
+      return;
+    }
+    
+    response.status = 200;
+    response.body = { 
+      success: true, 
+      administradores: result.data 
+    };
+  } catch (error) {
+    console.error("Error en listarAdministradores:", error);
+    response.status = 500;
+    response.body = { success: false, msg: "Error interno del servidor" };
+  }
+};
+
+// Listar funcionarios con rol de instructor
 export const listarInstructores = async (ctx: any) => {
   const { response } = ctx;
 
   try {
-    const rol = "instructor"; // Puedes cambiar esto por otro rol si es necesario
-
-    const instructores = await listarFuncionario_Roles(rol);
-
-    if (!instructores || instructores.length === 0) {
+    const result = await listarFuncionariosPorRol("instructor");
+    
+    if (!result.success) {
+      response.status = 500;
+      response.body = { 
+        success: false, 
+        msg: result.message || "Error al obtener instructores" 
+      };
+      return;
+    }
+    
+    if (!result.data || result.data.length === 0) {
       response.status = 404;
       response.body = { success: false, msg: "No se encontraron instructores" };
       return;
     }
-
+    
     response.status = 200;
-    response.body = { success: true, instructores };
+    response.body = { 
+      success: true, 
+      instructores: result.data 
+    };
   } catch (error) {
-    console.error("Error al listar instructores:", error);
+    console.error("Error en listarInstructores:", error);
     response.status = 500;
     response.body = { success: false, msg: "Error interno del servidor" };
   }
 };
 
-export const findFuncionarioById = async (ctx: any) => {
-  const { response, params, request } = ctx;
-
+// Obtener un funcionario por ID
+export const obtenerFuncionario = async (ctx: any) => {
+  const { response, params } = ctx;
+  
   try {
     const id = Number(params.id);
-    const rol = request.url.searchParams.get("rol") ?? undefined;
-
+    
     if (!id) {
       response.status = 400;
-      response.body = { success: false, msg: "ID es requerido" };
+      response.body = { success: false, msg: "ID de funcionario inválido" };
       return;
     }
-
-    // Filtrar por rol si se proporciona
-    const funcionarios = await listarFuncionario_Roles(rol);
-
-    if (!funcionarios || funcionarios.length === 0) {
-      response.status = 404;
-      response.body = { success: false, msg: "No se encontraron funcionarios" };
+    
+    const result = await obtenerFuncionarioPorId(id);
+    
+    if (!result.success) {
+      response.status = result.message === "Funcionario no encontrado" ? 404 : 500;
+      response.body = { 
+        success: false, 
+        msg: result.message || "Error al obtener funcionario" 
+      };
       return;
     }
-
-    const funcionario = funcionarios.find((func) => func.idFuncionario === id);
-
-    if (!funcionario) {
-      response.status = 404;
-      response.body = { success: false, msg: "Funcionario no encontrado" };
-      return;
-    }
-
+    
     response.status = 200;
-    response.body = { success: true, funcionario };
+    response.body = { 
+      success: true, 
+      funcionario: result.data 
+    };
   } catch (error) {
-    console.error("Error en findFuncionarioById:", error);
+    console.error(`Error en obtenerFuncionario:`, error);
     response.status = 500;
     response.body = { success: false, msg: "Error interno del servidor" };
   }
 };
 
-
-// Create
-
-import { insertarFuncionario, insertarFuncionarioHasTipoFuncionario } from "../Models/funcModel.ts";
-
-export const crearFuncionarioConRol = async (ctx: any) => {
-  const { response, request } = ctx;
+// Listar tipos de funcionario (roles disponibles)
+export const listarRoles = async (ctx: any) => {
+  const { response } = ctx;
 
   try {
-    const body = await request.body({ type: "json" }).value;
-
-    // Validar campos mínimos
-    const {
-      documento,
-      nombres,
-      apellidos,
-      email,
-      telefono,
-      url_imgFuncionario,
-      id_tipoDocumento,
-      id_tipoFuncionario,
-      password
-    } = body;
-
-    if (!documento || !nombres || !apellidos || !email || !telefono || !id_tipoDocumento || !id_tipoFuncionario || !password) {
-      response.status = 400;
-      response.body = { success: false, msg: "Faltan campos requeridos" };
-      return;
-    }
-
-    // Insertar en funcionario
-    const funcionarioInsert = await insertarFuncionario({
-      idFuncionario: null,
-      documento,
-      nombres,
-      apellidos,
-      email,
-      telefono,
-      url_imgFuncionario: url_imgFuncionario || null,
-      id_tipoDocumento
-    });
-
-    // Obtener ID del funcionario insertado (si tu sistema devuelve lastInsertId)
-    const idFuncionario = funcionarioInsert?.lastInsertId;
-
-    if (!idFuncionario) {
+    const result = await listarTiposFuncionario();
+    
+    if (!result.success) {
       response.status = 500;
-      response.body = { success: false, msg: "No se pudo insertar el funcionario" };
+      response.body = { 
+        success: false, 
+        msg: result.message || "Error al obtener roles de funcionario" 
+      };
       return;
     }
-
-    // Insertar en tabla de rompimiento
-    await insertarFuncionarioHasTipoFuncionario(idFuncionario, id_tipoFuncionario, password);
-
-    response.status = 201;
-    response.body = { success: true, msg: "Funcionario creado con éxito", idFuncionario };
+    
+    response.status = 200;
+    response.body = { 
+      success: true, 
+      roles: result.data 
+    };
   } catch (error) {
-    console.error("Error al crear funcionario:", error);
+    console.error("Error en listarRoles:", error);
     response.status = 500;
     response.body = { success: false, msg: "Error interno del servidor" };
   }
 };
-
-
-

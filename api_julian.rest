@@ -1,7 +1,18 @@
 GET http://localhost:8000/fichas/1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIiwiZXhwIjoxNzQ0NzgwMjM0fQ.hvyO2NGkmM-Z5UIc_-Hgy5mOFPkqx5N1tD5hlM5eVZU
+
 ### 
 GET http://localhost:8000/asistencia/tipos
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIiwiZXhwIjoxNzQ0NzgwMjM0fQ.hvyO2NGkmM-Z5UIc_-Hgy5mOFPkqx5N1tD5hlM5eVZU
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIiwiZXhwIjoxNzQ0ODYyNjc5fQ.04ocVL0y2scESvsWH0qOsDAXe8-rHKurKl0b8maEB2s
+
+###
+GET http://localhost:8000/aprendices
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIiwiZXhwIjoxNzQ0OTAyOTUxfQ.zI6knZ-foN-MAxLnWkBGlZwuVH78gv2uC05P22zxLyc
+
+###
+GET http://localhost:8000/aprendiz/1
+Content-Type: application/json
+Authorization: Bearer 

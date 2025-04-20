@@ -1,6 +1,6 @@
 // deno-lint-ignore-file
 import { generarToken } from "../Helpers/jwt.ts";
-import { listarFuncionario_Roles } from "../Models/funcModel.ts";
+import { listarFuncionariosPorRol } from "../Models/funcionarioModel.ts";
 import { listarAprendices } from "../Models/aprendizModel.ts";
 
 interface TokenPayload {
@@ -18,35 +18,50 @@ export const iniciarSesion = async (ctx: any) => {
   try {
     let usuario;
     let tokenPayload: TokenPayload = {
-      id: 0, // Inicializamos como null
+      id: 0, // Inicializamos como 0
       nombre: "",
       email: "",
       tipo: "",
     };
 
     if (tipo === "Instructor" || tipo === "Administrador") {
-      const funcionarios = await listarFuncionario_Roles(tipo);
-      if (!Array.isArray(funcionarios)) {
-        throw new Error("listarFuncionario no devolvió un array");
+      // Convertir tipo a formato correcto para la nueva función (administrador o instructor en minúsculas)
+      const rolMinuscula = tipo.toLowerCase();
+      
+      // Usar la nueva función que devuelve una estructura ServiceResponse
+      const resultado = await listarFuncionariosPorRol(rolMinuscula);
+      
+      if (!resultado.success || !resultado.data) {
+        throw new Error(`Error al obtener ${rolMinuscula}es`);
       }
       
-      usuario = funcionarios.find(
-        (func) => func.email === email && func.password === password
-      );
+      const funcionarios = resultado.data;
+      
+      // Buscar el usuario verificando la contraseña en los roles
+      usuario = funcionarios.find(func => {
+        if (func.email === email) {
+          // Buscar el rol que coincida con el tipo solicitado y verificar la contraseña
+          const rolEncontrado = func.roles.find(r => 
+            r.tipo_funcionario.toLowerCase() === rolMinuscula && r.password === password
+          );
+          
+          return !!rolEncontrado; // Devuelve true si se encontró el rol con la contraseña correcta
+        }
+        return false;
+      });
       
       if (usuario) {
         tokenPayload = {
-          id: usuario.idFuncionario, // Asumiento que es number
-          nombre: usuario.nombres,
+          id: usuario.idFuncionario,
+          nombre: `${usuario.nombres} ${usuario.apellidos}`,
           email: usuario.email,
           tipo: "funcionario",
-          rol: usuario.rol
+          rol: rolMinuscula
         };
-
-        console.log()
       }
     } else if (tipo === "aprendiz") {
-      const aprendices = await listarAprendices();
+      const resultado = await listarAprendices();
+      const aprendices = resultado.success ? resultado.aprendices : [];
       if (!Array.isArray(aprendices)) {
         throw new Error("listarAprendiz no devolvió un array");
       }
@@ -70,7 +85,7 @@ export const iniciarSesion = async (ctx: any) => {
     }
 
     if (usuario) {
-      const token = await generarToken(tokenPayload.nombre); // Enviamos todo el payload
+      const token = await generarToken(tokenPayload.nombre); // Enviamos el nombre para el token
       response.status = 200;
       response.body = { 
         token,

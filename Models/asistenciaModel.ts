@@ -24,6 +24,12 @@ export interface AsistenciaMasiva {
     idTipoAsistencia: number;
 }
 
+export interface AsistenciaRegistrada {
+    idasistencia: number;
+    aprendiz_idaprendiz: number;
+    tipo_asistencia_idtipo_asistencia: number;
+}
+
 // Nueva interfaz para resultados de operaciones
 export interface ResultadoOperacion {
     success: boolean;
@@ -56,6 +62,27 @@ export const listarTiposAsistencia = async (): Promise<tipo_asistencia[]> => {
         return [];
     }
 }
+
+export const obtenerAsistenciasPorFechaYFicha = async (fecha: string, idFicha: number): Promise<AsistenciaRegistrada[]> => {
+    try {
+        const query = `
+            SELECT 
+                a.idasistencia,
+                a.aprendiz_idaprendiz,
+                a.tipo_asistencia_idtipo_asistencia
+            FROM edu_sena.asistencia a
+            INNER JOIN edu_sena.aprendiz ap ON a.aprendiz_idaprendiz = ap.idaprendiz
+            WHERE a.fecha_asistencia = ?
+            AND ap.ficha_idficha = ?
+        `;
+        
+        const result = await Conexion.query(query, [fecha, idFicha]);
+        return result as AsistenciaRegistrada[];
+    } catch (error) {
+        console.error("Error al obtener asistencias por fecha y ficha", error);
+        return [];
+    }
+};
 
 // Crud
 

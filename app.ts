@@ -5,9 +5,8 @@ import { logData } from "./Middlewares/logData.ts";
 // Routers
 import { RouterLogin } from "./Routes/loginUsers.ts";
 import RouterFunc from "./Routes/funcionarioRoutes.ts";
-import routerAsistencia from "./Routes/asistenciaRutes.ts";
+import routerAsistencia from "./Routes/asistenciaRoutes.ts";
 import RouterAprendiz from "./Routes/aprendizRoutes.ts";
-import routerHistorial from "./Routes/historialRoutes.ts";
 import RouterRecuperarPassword from "./Routes/passwordRecoveryRoutes.ts";
 import { Conexion } from "./Models/conexion.ts";
 import { crearTablaCodigosRecuperacion } from "./Models/passwordRecoveryModel.ts";
@@ -37,7 +36,6 @@ const Routes = [
   RouterFunc, 
   routerAsistencia,
   RouterAprendiz,
-  routerHistorial,
   RouterRecuperarPassword,
   RouterFicha,
   routerPrograma,
