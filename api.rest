@@ -10,3 +10,47 @@ Content-Type: application/json
 }
 
 ### Login Funcionario
+# POST http://localhost:8000/
+# Content-Type: application/json
+
+# {
+#     "email": "admin@gmail.com",
+#     "password": "admin123",
+#     "tipo": "funcionario"
+# }
+
+### Solicitar código de recuperación para Aprendiz
+POST http://localhost:8000/solicitar-codigo
+Content-Type: application/json
+
+{
+    "email": "jpber27@gmail.com"
+}
+
+### Solicitar código de recuperación para Funcionario
+POST http://localhost:8000/solicitar-codigo
+Content-Type: application/json
+
+{
+    "email": "jpber2720@gmail.com"
+}
+
+### Verificar código y actualizar contraseña para Aprendiz
+POST http://localhost:8000/verificar-codigo
+Content-Type: application/json
+
+{
+    "email": "jpber27@gmail.com",
+    "codigo": "771563", 
+    "nuevaPassword": "nuevaContraseña123"
+}
+
+### Verificar código y actualizar contraseña para Funcionario
+POST http://localhost:8000/verificar-codigo
+Content-Type: application/json
+
+{
+    "email": "jpber2720@gmail.com",
+    "codigo": "868791", // Reemplazar con el código recibido
+    "nuevaPassword": "nuevaContraseña123"
+}
