@@ -80,10 +80,21 @@ export const listarAprendizActivos = async (): Promise<AprendizResponse> => {
 
 export const obtenerAprendizPorId = async (id: number): Promise<AprendizResponse> => {
   try {
-    const result = await Conexion.query("SELECT * FROM aprendiz WHERE idaprendiz = ?", [id]);
+    const result = await Conexion.query(
+      `SELECT 
+         a.*,
+         td.idtipo_documento,
+         td.tipo_documento,
+         td.abreviatura_tipo_documento
+       FROM aprendiz a
+       INNER JOIN tipo_documento td 
+         ON a.tipo_documento_idtipo_documento = td.idtipo_documento
+       WHERE a.idaprendiz = ?`, 
+      [id]
+    );
     
     if (Array.isArray(result) && result.length > 0) {
-      return { success: true, aprendiz: result[0] as Aprendiz };
+      return { success: true, aprendiz: result[0] as (Aprendiz & {tipo_documento: string, abreviatura_tipo_documento: string}) };
     } else {
       return { success: false, msg: "Aprendiz no encontrado" };
     }
