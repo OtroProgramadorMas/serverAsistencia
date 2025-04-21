@@ -106,7 +106,7 @@ export const obtenerAprendizPorId = async (id: number): Promise<AprendizResponse
 
 export const obtenerAprendicesPorFicha = async (fichaId: number): Promise<AprendizResponse> => {
   try {
-    // Primero verificamos que la ficha exista
+    // Verificamos que la ficha exista
     const ficha = await buscarFichaPorId(fichaId);
     if (!ficha) {
       return { success: false, msg: "La ficha especificada no existe" };
@@ -114,21 +114,28 @@ export const obtenerAprendicesPorFicha = async (fichaId: number): Promise<Aprend
     
     const result = await Conexion.query(
       `SELECT 
-         a.*,
-         td.* 
+         a.*, 
+         td.*,
+         ea.* 
        FROM aprendiz a
        INNER JOIN tipo_documento td 
          ON a.tipo_documento_idtipo_documento = td.idtipo_documento
+       INNER JOIN estado_aprendiz ea
+         ON a.estado_aprendiz_idestado_aprendiz = ea.idestado_aprendiz
        WHERE a.ficha_idficha = ?`, 
       [fichaId]
     );
-    
-    return { success: true, aprendices: result as (Aprendiz & {tipo_documento: string})[] };
+
+    return {
+      success: true,
+      aprendices: result as (Aprendiz & { tipo_documento: string; estado_aprendiz: string })[],
+    };
   } catch (error) {
     console.error(`Error al obtener aprendices de la ficha ${fichaId}:`, error);
     return { success: false, msg: "Error al obtener aprendices por ficha", error };
   }
 };
+
 
 export const listarEstadosAprendiz = async () => {
   try {
@@ -277,14 +284,18 @@ export const actualizarAprendiz = async (id: number, aprendiz: Partial<Aprendiz>
 
 export const eliminarAprendiz = async (id: number): Promise<AprendizResponse> => {
   try {
-    // Verificamos que el aprendiz exista antes de eliminarlo
+    // Verificamos que el aprendiz exista
     const aprendizExistente = await obtenerAprendizPorId(id);
     if (!aprendizExistente.success) {
       return { success: false, msg: "El aprendiz no existe" };
     }
-    
+
+    // Primero eliminamos asistencias relacionadas
+    await Conexion.query("DELETE FROM asistencia WHERE aprendiz_idaprendiz = ?", [id]);
+
+    // Ahora eliminamos el aprendiz
     const result = await Conexion.query("DELETE FROM aprendiz WHERE idaprendiz = ?", [id]);
-    
+
     if (result && result.affectedRows > 0) {
       return { success: true, msg: "Aprendiz eliminado exitosamente" };
     } else {
@@ -295,6 +306,7 @@ export const eliminarAprendiz = async (id: number): Promise<AprendizResponse> =>
     return { success: false, msg: "Error al eliminar el aprendiz", error };
   }
 };
+
 
 export const buscarAprendicesPorDocumento = async (documento: string): Promise<AprendizResponse> => {
   try {
