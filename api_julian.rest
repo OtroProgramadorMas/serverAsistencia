@@ -10,9 +10,9 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjb
 ###
 GET http://localhost:8000/aprendices
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIiwiZXhwIjoxNzQ0OTAyOTUxfQ.zI6knZ-foN-MAxLnWkBGlZwuVH78gv2uC05P22zxLyc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJKb3NlIENhbWlsbyBOYXJhbmpvIFJ1aXoiLCJleHAiOjE3NDUyMDkzNDV9.jalST10pyWoIvEQh-bllzsBIKOZ4HStk75WTt7H82PQ
 
 ###
-GET http://localhost:8000/aprendiz/1
+GET http://localhost:8000/fichas/1
 Content-Type: application/json
-Authorization: Bearer 
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJhYWEiLCJleHAiOjE3NDUyMDU1MDB9.lTmnitQ9wG5TePxzxRwkH8NDrQT9CM3gpH5kO3EVw7s

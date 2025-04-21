@@ -79,7 +79,7 @@ export const listarFichasPorPrograma = async (programa_id: number): Promise<Fich
 export const buscarFichaPorId = async (idficha: number): Promise<Ficha_Asignacion_Estado | null> => {
   try {
     const rows = await Conexion.query(
-      `SELECT f.*, e.*, p.codigo_programa, p.nombre_programa
+      `SELECT f.*, e.*, p.codigo_programa, p.nombre_programa, fh.funcionario_idfuncionario
        FROM ficha f
        INNER JOIN estado_ficha e ON e.idestado_ficha = f.estado_ficha_idestado_ficha
        INNER JOIN programa p ON p.idprograma = f.programa_idprograma
