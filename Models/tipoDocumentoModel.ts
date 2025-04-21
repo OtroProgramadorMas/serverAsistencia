@@ -9,7 +9,7 @@ export interface tipo_documento{
         const result = await Conexion.query("select idtipo_documento,tipo_documento from tipo_documento");
         return result as tipo_documento[];
     } catch (error) {
-        console.error ("error al listar Aprendices",error);
+        console.error ("error al listar documentos",error);
         return[];
     }
  }
