@@ -10,7 +10,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjb
 ###
 GET http://localhost:8000/aprendices/ficha/1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIENpcGFnYXV0YSBBcmJlbMOhZXoiLCJleHAiOjE3NDUyNTA1MTF9.qD4pqO8s-PY_pVIuuvnRDoyZmLmedSjMDVa_iQBeg5U
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIENpcGFnYXV0YSBBcmJlbMOhZXoiLCJleHAiOjE3NDUyNTQxODh9.5fGUXAYCi40TJ9N3I7VtL8IEajs95ecGynzNkBVXZMI
 
 ###
 GET http://localhost:8000/fichas/1
