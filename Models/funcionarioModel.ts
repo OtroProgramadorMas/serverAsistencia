@@ -8,6 +8,7 @@ export interface Funcionario {
   email: string;
   telefono: string;
   url_imgFuncionario?: string | null;
+  password?: string;
   tipo_documento_idtipo_documento: number;
 }
 
@@ -19,6 +20,7 @@ export interface FuncionarioConRoles {
   email: string;
   telefono: string;
   url_imgFuncionario: string | null;
+  password?: string;
   tipo_documento_idtipo_documento: number;
   tipo_documento?: string;
   abreviatura_tipo_documento?: string;
@@ -53,12 +55,13 @@ export const listarFuncionariosConRoles = async (): Promise<ServiceResponse<Func
         f.email,
         f.telefono,
         f.url_imgFuncionario,
+        f.password,
         f.tipo_documento_idtipo_documento,
         td.tipo_documento,
         td.abreviatura_tipo_documento,
         tf.idtipo_funcionario,
         tf.tipo_funcionario,
-        ft.password
+        ft.password as rol_password
       FROM funcionario f
       INNER JOIN tipo_documento td ON f.tipo_documento_idtipo_documento = td.idtipo_documento
       INNER JOIN funcionario_has_tipo_funcionario ft ON f.idFuncionario = ft.funcionario_idfuncionario
@@ -82,6 +85,7 @@ export const listarFuncionariosConRoles = async (): Promise<ServiceResponse<Func
           email: row.email,
           telefono: row.telefono,
           url_imgFuncionario: row.url_imgFuncionario,
+          password: row.password,
           tipo_documento_idtipo_documento: row.tipo_documento_idtipo_documento,
           tipo_documento: row.tipo_documento,
           abreviatura_tipo_documento: row.abreviatura_tipo_documento,
@@ -98,7 +102,7 @@ export const listarFuncionariosConRoles = async (): Promise<ServiceResponse<Func
           funcionario.roles.push({
             idtipo_funcionario: row.idtipo_funcionario,
             tipo_funcionario: row.tipo_funcionario,
-            password: row.password
+            password: row.rol_password
           });
         }
       }
@@ -150,12 +154,13 @@ export const listarFuncionariosPorRol = async (nombreRol: string): Promise<Servi
         f.email,
         f.telefono,
         f.url_imgFuncionario,
+        f.password,
         f.tipo_documento_idtipo_documento,
         td.tipo_documento,
         td.abreviatura_tipo_documento,
         tf.idtipo_funcionario,
         tf.tipo_funcionario,
-        ft.password
+        ft.password as rol_password
       FROM funcionario f
       INNER JOIN tipo_documento td ON f.tipo_documento_idtipo_documento = td.idtipo_documento
       INNER JOIN funcionario_has_tipo_funcionario ft ON f.idFuncionario = ft.funcionario_idfuncionario
@@ -179,6 +184,7 @@ export const listarFuncionariosPorRol = async (nombreRol: string): Promise<Servi
           email: row.email,
           telefono: row.telefono,
           url_imgFuncionario: row.url_imgFuncionario,
+          password: row.password,
           tipo_documento_idtipo_documento: row.tipo_documento_idtipo_documento,
           tipo_documento: row.tipo_documento,
           abreviatura_tipo_documento: row.abreviatura_tipo_documento,
@@ -193,7 +199,7 @@ export const listarFuncionariosPorRol = async (nombreRol: string): Promise<Servi
           funcionario.roles.push({
             idtipo_funcionario: row.idtipo_funcionario,
             tipo_funcionario: row.tipo_funcionario,
-            password: row.password
+            password: row.rol_password
           });
         }
       }
@@ -244,12 +250,13 @@ export const obtenerFuncionarioPorId = async (id: number): Promise<ServiceRespon
         f.email,
         f.telefono,
         f.url_imgFuncionario,
+        f.password,
         f.tipo_documento_idtipo_documento,
         td.tipo_documento,
         td.abreviatura_tipo_documento,
         tf.idtipo_funcionario,
         tf.tipo_funcionario,
-        ft.password
+        ft.password as rol_password
       FROM funcionario f
       INNER JOIN tipo_documento td ON f.tipo_documento_idtipo_documento = td.idtipo_documento
       INNER JOIN funcionario_has_tipo_funcionario ft ON f.idFuncionario = ft.funcionario_idfuncionario
@@ -275,6 +282,7 @@ export const obtenerFuncionarioPorId = async (id: number): Promise<ServiceRespon
       email: result[0].email,
       telefono: result[0].telefono,
       url_imgFuncionario: result[0].url_imgFuncionario,
+      password: result[0].password,
       tipo_documento_idtipo_documento: result[0].tipo_documento_idtipo_documento,
       tipo_documento: result[0].tipo_documento,
       abreviatura_tipo_documento: result[0].abreviatura_tipo_documento,
@@ -288,7 +296,7 @@ export const obtenerFuncionarioPorId = async (id: number): Promise<ServiceRespon
         funcionario.roles.push({
           idtipo_funcionario: row.idtipo_funcionario,
           tipo_funcionario: row.tipo_funcionario,
-          password: row.password
+          password: row.rol_password
         });
       }
     }
@@ -324,10 +332,11 @@ export const obtenerFuncionarioPorId = async (id: number): Promise<ServiceRespon
   }
 };
 
-// Crear nuevo funcionario con roles
+// Crear nuevo funcionario con roles y asignación de ficha
 export const crearFuncionarioConRoles = async (
   funcionario: Funcionario, 
-  roles: {idRol: number, password: string}[]
+  roles: {idRol: number, password: string}[],
+  fichas?: number[]
 ): Promise<ServiceResponse<number>> => {
   try {
     // Iniciar transacción
@@ -361,33 +370,29 @@ export const crearFuncionarioConRoles = async (
       };
     }
     
-    // Insertar funcionario
+    // Obtener el siguiente ID disponible
+    const maxIdResult = await Conexion.query("SELECT MAX(idFuncionario) as maxId FROM funcionario");
+    const nuevoId = maxIdResult[0].maxId ? maxIdResult[0].maxId + 1 : 1;
+    
+    // Insertar funcionario con ID explícito
     const insertQuery = `
       INSERT INTO funcionario (
-        documento, nombres, apellidos, email, telefono, 
-        url_imgFuncionario, tipo_documento_idtipo_documento
-      ) VALUES (?, ?, ?, ?, ?, ?, ?)
+        idFuncionario, documento, nombres, apellidos, email, telefono, 
+        url_imgFuncionario, password, tipo_documento_idtipo_documento
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
     
-    const insertResult = await Conexion.query(insertQuery, [
+    await Conexion.query(insertQuery, [
+      nuevoId,
       funcionario.documento,
       funcionario.nombres,
       funcionario.apellidos,
       funcionario.email,
       funcionario.telefono,
       funcionario.url_imgFuncionario || null,
+      funcionario.password || null,
       funcionario.tipo_documento_idtipo_documento
     ]);
-    
-    const idFuncionario = insertResult.lastInsertId;
-    
-    if (!idFuncionario) {
-      await Conexion.query('ROLLBACK');
-      return {
-        success: false,
-        message: "Error al crear el funcionario"
-      };
-    }
     
     // Insertar roles
     if (roles.length === 0) {
@@ -406,10 +411,23 @@ export const crearFuncionarioConRoles = async (
       `;
       
       await Conexion.query(insertRolQuery, [
-        idFuncionario,
+        nuevoId,
         rol.idRol,
         rol.password
       ]);
+    }
+    
+    // Asignar fichas si es instructor y se proporcionaron fichas
+    if (fichas && fichas.length > 0) {
+      for (const idFicha of fichas) {
+        const insertFichaQuery = `
+          INSERT INTO funcionario_has_ficha (
+            funcionario_idfuncionario, ficha_idficha
+          ) VALUES (?, ?)
+        `;
+        
+        await Conexion.query(insertFichaQuery, [nuevoId, idFicha]);
+      }
     }
     
     await Conexion.query('COMMIT');
@@ -417,7 +435,7 @@ export const crearFuncionarioConRoles = async (
     return {
       success: true,
       message: "Funcionario creado exitosamente",
-      data: idFuncionario
+      data: nuevoId
     };
   } catch (error) {
     await Conexion.query('ROLLBACK');
@@ -434,7 +452,8 @@ export const crearFuncionarioConRoles = async (
 export const actualizarFuncionarioConRoles = async (
   id: number,
   funcionario: Partial<Funcionario>,
-  roles?: {idRol: number, password: string}[]
+  roles?: {idRol: number, password: string}[],
+  fichas?: number[]
 ): Promise<ServiceResponse<void>> => {
   try {
     // Iniciar transacción
@@ -520,6 +539,11 @@ export const actualizarFuncionarioConRoles = async (
       updateValues.push(funcionario.url_imgFuncionario);
     }
     
+    if (funcionario.password !== undefined) {
+      updateFields.push("password = ?");
+      updateValues.push(funcionario.password);
+    }
+    
     if (funcionario.tipo_documento_idtipo_documento) {
       updateFields.push("tipo_documento_idtipo_documento = ?");
       updateValues.push(funcionario.tipo_documento_idtipo_documento);
@@ -554,6 +578,28 @@ export const actualizarFuncionarioConRoles = async (
           rol.idRol,
           rol.password
         ]);
+      }
+    }
+    
+    // Actualizar fichas asignadas si se proporcionaron
+    if (fichas !== undefined) {
+      // Eliminar asignaciones actuales
+      await Conexion.query(
+        "DELETE FROM funcionario_has_ficha WHERE funcionario_idfuncionario = ?",
+        [id]
+      );
+      
+      // Insertar nuevas asignaciones
+      if (fichas.length > 0) {
+        for (const idFicha of fichas) {
+          const insertFichaQuery = `
+            INSERT INTO funcionario_has_ficha (
+              funcionario_idfuncionario, ficha_idficha
+            ) VALUES (?, ?)
+          `;
+          
+          await Conexion.query(insertFichaQuery, [id, idFicha]);
+        }
       }
     }
     

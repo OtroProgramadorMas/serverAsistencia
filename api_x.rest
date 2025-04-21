@@ -13,14 +13,122 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjb
 ###
 GET http://localhost:8000/aprendices/ficha/1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIiwiZXhwIjoxNzQ0Mjg5NzM5fQ.5o9sgwfJJm_AlZeDLyHMouR9rXFT1zS5gRt1tNQZZcM
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJqdWxpbyIsImV4cCI6MTc0NTE5NDczMX0.73iaXJ6ZaSZQYZDECr_4lA-A_wrnn59S2gPCOyOifAs
 
 ###
 GET http://localhost:8000/tipoDocumento
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIiwiZXhwIjoxNzQ0MjkzNjU2fQ.x6XUzBw36ZrWq8HV3Lx7BbNL_gNw8JXwUM1jnp8yqOY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXLDrWEgRmVybmFuZGEgTMOzcGV6IE1hcnTDrW5leiIsImV4cCI6MTc0NTE4OTg1Mn0.zSEDX9yO5rPTyD8XV5vZTbCOziFGCIdzsvfNKixnqUI
 
+###
+GET http://localhost:8000/tipofichacargo
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXLDrWEgRmVybmFuZGEgTMOzcGV6IE1hcnTDrW5leiIsImV4cCI6MTc0NTE5NzY5MX0.I0tfo7nKvaIEPG-4ORmzwe8DuMaqGuzKnCb9-0G8RAU
 ###
 GET http://localhost:8000/estado_aprendiz
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIiwiZXhwIjoxNzQ0Mjk3NjkyfQ.VLqdcpTPArNZd8Di27Xd1cJ0t_uLq-W4zRQsvrMRRkc
+
+### Variables globales
+@baseUrl = http://localhost:8000
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJDYXJsb3MgQWxiZXJ0byBSb2Ryw61ndWV6IFPDoW5jaGV6IiwiZXhwIjoxNzQ1MjE2MDczfQ.0oJw87B6YD4Xmu1rrWyhyeh8UYjp_vI9DnIulNj__Yc
+
+### Listar todos los funcionarios
+GET {{baseUrl}}/funcionarios
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+### Listar administradores
+GET {{baseUrl}}/funcionarios/administradores
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+### Listar instructores
+GET {{baseUrl}}/funcionarios/instructores
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+### Obtener un funcionario por ID
+GET {{baseUrl}}/funcionarios/1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+### Listar roles disponibles
+GET {{baseUrl}}/funcionarios/roles
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+### Crear un nuevo funcionario
+POST {{baseUrl}}/funcionarios
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "funcionario": {
+    "documento": "234324",
+    "nombres": "Juandsfsdfsdf",
+    "apellidos": "Pérez asdas",
+    "email": "fgdgdf@correo.com",
+    "telefono": "34324324327",
+    "url_imgFuncionario": "img/funcionarios/nuevafoto.jpg",
+    "password": "password123",
+    "tipo_documento_idtipo_documento": 1
+  },
+  "roles": [
+    {
+      "idRol": 1,
+      "password": "password123"
+    }
+  ],
+  "fichas": [1]
+}
+
+### Actualizar un funcionario existente
+PUT {{baseUrl}}/funcionarios/2
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "funcionario": {
+    "documento": "56545234",
+    "nombres": "Julio teña",
+    "apellidos": "Pérez Gómez",
+    "email": "nuevo_email@correo.com",
+    "telefono": "3109876543",
+    "url_imgFuncionario": "img/funcionarios/foto_actualizada.jpg",
+    "password": "password_nuevo",
+    "tipo_documento_idtipo_documento": 1
+  },
+  "roles": [
+    {
+      "idRol": 2,
+      "password": "password_nuevo"
+    }
+  ],
+  "fichas": [2]
+}
+
+### Eliminar un funcionario
+DELETE {{baseUrl}}/funcionarios/5
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+### Asignar ficha a instructor
+POST {{baseUrl}}/funcionarios/fichas/asignar
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "idFuncionario": 2,
+  "idFicha": 1
+}
+
+### Desasignar ficha de instructor
+POST {{baseUrl}}/funcionarios/fichas/desasignar
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "idFuncionario": 2,
+  "idFicha": 1
+}

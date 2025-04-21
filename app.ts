@@ -7,6 +7,7 @@ import { RouterPasswordRecovery } from "./Routes/emailRouters.ts";
 
 // Routers
 import RouterFunc from "./Routes/funcionarioRoutes.ts";
+import routerTipoFichas from "./Routes/tipoFichaRouter.ts";
 import routerAsistencia from "./Routes/asistenciaRoutes.ts";
 import RouterAprendiz from "./Routes/aprendizRoutes.ts";
 import RouterRecuperarPassword from "./Routes/passwordRecoveryRoutes.ts";
@@ -44,7 +45,8 @@ const Routes = [
   uploadRouter,
   routerTipoDoc,
   routerAdmin,
-  RouterAgregarAprendiz
+  RouterAgregarAprendiz,
+  routerTipoFichas
 ];
 Routes.forEach((router) => {
   app.use(router.routes());
