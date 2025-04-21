@@ -55,7 +55,6 @@ export const listarFuncionariosConRoles = async (): Promise<ServiceResponse<Func
         f.email,
         f.telefono,
         f.url_imgFuncionario,
-        f.password,
         f.tipo_documento_idtipo_documento,
         td.tipo_documento,
         td.abreviatura_tipo_documento,
