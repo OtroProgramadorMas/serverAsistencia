@@ -13,12 +13,34 @@ interface TokenPayload {
 
 export const iniciarSesion = async (ctx: any) => {
   const { response, request } = ctx;
-  const { email, password, tipo } = await request.body.json();
-
+  
   try {
-    let usuario;
+    // Verificamos que body exista y podamos hacer json()
+    if (!request.body || typeof request.body.json !== 'function') {
+      response.status = 400;
+      response.body = { message: "Cuerpo de solicitud no válido" };
+      return;
+    }
+
+    const body = await request.body.json().catch(() => null);
+    if (!body) {
+      response.status = 400;
+      response.body = { message: "JSON no válido en el cuerpo de la solicitud" };
+      return;
+    }
+
+    const { email, password, tipo } = body;
+
+    // Validamos los campos requeridos
+    if (!email || !password || !tipo) {
+      response.status = 400;
+      response.body = { message: "Faltan campos requeridos (email, password, tipo)" };
+      return;
+    }
+
+    let usuario = null;
     let tokenPayload: TokenPayload = {
-      id: 0, // Inicializamos como 0
+      id: null,
       nombre: "",
       email: "",
       tipo: "",
@@ -61,7 +83,14 @@ export const iniciarSesion = async (ctx: any) => {
       }
     } else if (tipo === "aprendiz") {
       const resultado = await listarAprendices();
-      const aprendices = resultado.success ? resultado.aprendices : [];
+      
+      if (!resultado.success || !resultado.aprendices) {
+        throw new Error("Error al obtener aprendices");
+      }
+      
+      // Ahora trabajamos con el array de aprendices
+      const aprendices = resultado.aprendices;
+      
       if (!Array.isArray(aprendices)) {
         throw new Error("listarAprendiz no devolvió un array");
       }
@@ -72,9 +101,9 @@ export const iniciarSesion = async (ctx: any) => {
       
       if (usuario) {
         tokenPayload = {
-          id: usuario.idaprendiz as number, // Aseguramos que es number
-          nombre: usuario.nombres_aprendiz,
-          email: usuario.email_aprendiz,
+          id: Number(usuario.idaprendiz) || null,
+          nombre: usuario.nombres_aprendiz || "",
+          email: usuario.email_aprendiz || "",
           tipo: "aprendiz"
         };
       }
@@ -104,6 +133,6 @@ export const iniciarSesion = async (ctx: any) => {
   } catch (error) {
     console.error("Error en el servidor:", error);
     response.status = 500;
-    response.body = { message: "Error en el servidor" };
+    response.body = { message: "Error en el servidor: " + (error instanceof Error ? error.message : String(error)) };
   }
 };
