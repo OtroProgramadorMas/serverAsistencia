@@ -16,3 +16,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjb
 GET http://localhost:8000/fichas/1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJhYWEiLCJleHAiOjE3NDUyMDU1MDB9.lTmnitQ9wG5TePxzxRwkH8NDrQT9CM3gpH5kO3EVw7s
+###
+GET http://localhost:8000/tipoDocumento
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIENpcGFnYXV0YSBBcmJlbMOhZXoiLCJleHAiOjE3NDUzNjI5MTZ9.03ejpNKQ0nGm8qLWTT4769A9nkwGE4B-Y-TZFaSuD4g

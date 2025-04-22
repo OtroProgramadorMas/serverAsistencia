@@ -216,7 +216,7 @@ export const createAprendiz = async (ctx: any) => {
   }
 
   try {
-    const body = await request.body().value;
+    const body = await request.body.json();
     const requiredFields = [
       'documento_aprendiz', 
       'nombres_aprendiz', 

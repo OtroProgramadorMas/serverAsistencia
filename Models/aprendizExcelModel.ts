@@ -31,7 +31,7 @@ function validarAprendiz(row: any): boolean {
 
 export const obtenerAprendicesPorFichaId = async (idficha: 1) => {
   const { rows } = await Conexion.execute(
-    "SELECT * FROM aprendiz WHERE ficha_idficha = ?",
+    /*"SELECT * FROM aprendiz WHERE ficha_idficha = ?",*/
     [idficha]
   );
   return rows;
@@ -41,10 +41,10 @@ export const obtenerAprendicesPorFichaId = async (idficha: 1) => {
 // Listar aprendices
 export const ListarAprendices = async () => {
   try {
-    const query =`SELECT 
+   /* const query =`SELECT 
     a.nombres_aprendiz, a.apellidos_aprendiz, a.tipo_documento_idtipo_documento, a.documento_aprendiz, a.email_aprendiz, a.telefono_aprendiz 
     FROM aprendiz a`
-    ;
+    ;*/
     const result = await Conexion.query(query);
     return result;
   } catch (error) {
