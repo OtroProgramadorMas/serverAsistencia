@@ -54,6 +54,7 @@ export const listarAprendiz = async (): Promise<AprendizResponse> => {
   }
 };
 
+
 export const listarAprendizActivos = async (): Promise<AprendizResponse> => {
   try {
     const result = await Conexion.query(
@@ -114,7 +115,7 @@ export const obtenerAprendicesPorFicha = async (fichaId: number): Promise<Aprend
     
     const result = await Conexion.query(
       `SELECT 
-         a.*, 
+         a.*,
          td.*,
          ea.* 
        FROM aprendiz a
@@ -160,6 +161,8 @@ export const crearAprendiz = async (aprendiz: Omit<Aprendiz, 'idaprendiz'>): Pro
     // Aseguramos que el estado sea 2 por defecto
     const estadoAprendiz = 2;  // Estado predefinido como 2
     
+    console.log("✅ Datos que se van a insertar:", aprendiz);
+
     const result = await Conexion.query(
       `INSERT INTO aprendiz (
         documento_aprendiz, 
@@ -195,6 +198,7 @@ export const crearAprendiz = async (aprendiz: Omit<Aprendiz, 'idaprendiz'>): Pro
       return { success: false, msg: "No se pudo crear el aprendiz" };
     }
   } catch (error) {
+    console.error("❌ Error al crear aprendiz:", error); 
     console.error("Error al crear aprendiz:", error);
     return { success: false, msg: "Error al crear el aprendiz", error };
   }
@@ -251,11 +255,11 @@ export const actualizarAprendiz = async (id: number, aprendiz: Partial<Aprendiz>
       values.push(aprendiz.ficha_idficha);
     }
     if (aprendiz.estado_aprendiz_idestado_aprendiz !== undefined) {
-      fields.push("estado_aprendiz_idestado_aprendiz = ?");
+      fields.push("estado_aprendiz_idestado_aprendiz = 2");
       values.push(aprendiz.estado_aprendiz_idestado_aprendiz);
     }
     if (aprendiz.tipo_documento_idtipo_documento !== undefined) {
-      fields.push("tipo_documento_idtipo_documento = ?");
+      fields.push("tipo_documento_idtipo_documento = 1");
       values.push(aprendiz.tipo_documento_idtipo_documento);
     }
 
