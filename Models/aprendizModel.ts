@@ -159,7 +159,7 @@ export const crearAprendiz = async (aprendiz: Omit<Aprendiz, 'idaprendiz'>): Pro
     }
     
     // Aseguramos que el estado sea 2 por defecto
-    const estadoAprendiz = 2;  // Estado predefinido como 2
+    const estadoAprendiz = aprendiz.estado_aprendiz_idestado_aprendiz || 2;
     
     console.log("✅ Datos que se van a insertar:", aprendiz);
 
@@ -255,11 +255,11 @@ export const actualizarAprendiz = async (id: number, aprendiz: Partial<Aprendiz>
       values.push(aprendiz.ficha_idficha);
     }
     if (aprendiz.estado_aprendiz_idestado_aprendiz !== undefined) {
-      fields.push("estado_aprendiz_idestado_aprendiz = 2");
+      fields.push("estado_aprendiz_idestado_aprendiz = ?");  // Corregido: usar parámetro en lugar de hardcodear "2"
       values.push(aprendiz.estado_aprendiz_idestado_aprendiz);
     }
     if (aprendiz.tipo_documento_idtipo_documento !== undefined) {
-      fields.push("tipo_documento_idtipo_documento = 1");
+      fields.push("tipo_documento_idtipo_documento = ?");  // Corregido: usar parámetro en lugar de hardcodear "1"
       values.push(aprendiz.tipo_documento_idtipo_documento);
     }
 
@@ -272,6 +272,9 @@ export const actualizarAprendiz = async (id: number, aprendiz: Partial<Aprendiz>
     query += fields.join(", ");
     query += " WHERE idaprendiz = ?";
     values.push(id);
+
+    console.log("Query de actualización:", query);
+    console.log("Valores:", values);
 
     const result = await Conexion.query(query, values);
     
