@@ -375,8 +375,8 @@ export const crearFuncionarioConRoles = async (
     const insertQuery = `
       INSERT INTO funcionario (
         idFuncionario, documento, nombres, apellidos, email, telefono, 
-        url_imgFuncionario, password, tipo_documento_idtipo_documento
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        url_imgFuncionario, tipo_documento_idtipo_documento
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `;
     
     await Conexion.query(insertQuery, [
@@ -387,7 +387,6 @@ export const crearFuncionarioConRoles = async (
       funcionario.email,
       funcionario.telefono,
       funcionario.url_imgFuncionario || null,
-      funcionario.password || null,
       funcionario.tipo_documento_idtipo_documento
     ]);
     
@@ -416,7 +415,32 @@ export const crearFuncionarioConRoles = async (
     
     // Asignar fichas si es instructor y se proporcionaron fichas
     if (fichas && fichas.length > 0) {
-      for (const idFicha of fichas) {
+      const fichasIds = [];
+      for (const fichaValue of fichas) {
+        // Si el valor parece ser un código de ficha (mayor a 100000 por ejemplo)
+        // Ajusta este número según tus códigos de ficha
+        if (fichaValue > 100000) {
+          // Buscar el ID correspondiente al código
+          const fichaQuery = "SELECT idficha FROM ficha WHERE codigo_ficha = ?";
+          const fichaResult = await Conexion.query(fichaQuery, [fichaValue.toString()]);
+          
+          if (fichaResult.length > 0) {
+            fichasIds.push(fichaResult[0].idficha);
+          } else {
+            await Conexion.query('ROLLBACK');
+            return {
+              success: false,
+              message: `La ficha con código ${fichaValue} no existe`
+            };
+          }
+        } else {
+          // Si parece ser un ID, usarlo directamente
+          fichasIds.push(fichaValue);
+        }
+      }
+      
+      // Insertar las fichas con los IDs correctos
+      for (const idFicha of fichasIds) {
         const insertFichaQuery = `
           INSERT INTO funcionario_has_ficha (
             funcionario_idfuncionario, ficha_idficha
@@ -534,11 +558,6 @@ export const actualizarFuncionarioConRoles = async (
     if (funcionario.url_imgFuncionario !== undefined) {
       updateFields.push("url_imgFuncionario = ?");
       updateValues.push(funcionario.url_imgFuncionario);
-    }
-    
-    if (funcionario.password !== undefined) {
-      updateFields.push("password = ?");
-      updateValues.push(funcionario.password);
     }
     
     if (funcionario.tipo_documento_idtipo_documento) {
