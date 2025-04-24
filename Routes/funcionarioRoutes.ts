@@ -5,7 +5,8 @@ import {
   listarFuncionarios,   
   listarAdministradores,   
   listarInstructores,   
-  obtenerFuncionario,   
+  obtenerFuncionario,
+  obtenerInstructorPorDocumento,   
   listarRoles,   
   crearFuncionario,   
   actualizarFuncionario,   
@@ -22,6 +23,8 @@ RouterFunc.get("/funcionarios/administradores", authMiddleware, listarAdministra
 RouterFunc.get("/funcionarios/instructores", authMiddleware, listarInstructores); 
 RouterFunc.get("/funcionarios/roles", authMiddleware, listarRoles); 
 RouterFunc.get("/funcionarios/:id", authMiddleware, obtenerFuncionario);  
+RouterFunc.get("/instructor/:documento", obtenerInstructorPorDocumento);
+
 
 // IMPORTANTE: Primero definir rutas específicas para fichas
 RouterFunc.post("/funcionarios/fichas/asignar", authMiddleware, asignarFicha); 

@@ -262,7 +262,7 @@ export const createAprendiz = async (ctx: any) => {
       return;
     }
 
-    response.status = 201;
+    response.status = 200;
     response.body = { 
       success: true, 
       msg: "Aprendiz creado exitosamente",
@@ -293,7 +293,7 @@ export const updateAprendiz = async (ctx: any) => {
       return;
     }
 
-    const body = await request.body().value;
+    const body = await request.body.json();
     
     // Verificar que existan campos para actualizar
     if (Object.keys(body).length === 0) {
