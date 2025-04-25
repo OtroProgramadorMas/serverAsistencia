@@ -11,6 +11,7 @@ export interface asistencia {
     email_aprendiz: string
     aprendiz_idaprendiz: number;
     tipo_asistencia_idtipo_asistencia: number;
+    nombre_instructor?: string; 
 }
 
 export interface tipo_asistencia {
@@ -93,18 +94,35 @@ export const listarAsistenciasPorAprendiz = async (idAprendiz: number): Promise<
                 a.idasistencia, 
                 a.fecha_asistencia, 
                 ta.nombre_tipo_asistencia, 
-                ap.idaprendiz as aprendiz_idaprendiz, 
-                ap.nombres_aprendiz as nombre_aprendiz, 
+                ap.idaprendiz AS aprendiz_idaprendiz, 
+                ap.nombres_aprendiz AS nombre_aprendiz, 
                 ap.apellidos_aprendiz, 
-                ap.documento_aprendiz,
-                ap.telefono_aprendiz,
+                ap.documento_aprendiz, 
+                ap.telefono_aprendiz, 
                 ap.email_aprendiz,
-                a.tipo_asistencia_idtipo_asistencia
-            FROM edu_sena.asistencia a 
-            INNER JOIN edu_sena.tipo_asistencia ta ON a.tipo_asistencia_idtipo_asistencia = ta.idtipo_asistencia 
-            INNER JOIN edu_sena.aprendiz ap ON a.aprendiz_idaprendiz = ap.idaprendiz 
-            WHERE ap.idaprendiz = ? 
-            ORDER BY a.fecha_asistencia DESC
+                a.tipo_asistencia_idtipo_asistencia,
+                CONCAT(f.nombres, ' ', f.apellidos) AS nombre_instructor
+            FROM 
+                edu_sena.asistencia a
+            INNER JOIN 
+                edu_sena.tipo_asistencia ta ON a.tipo_asistencia_idtipo_asistencia = ta.idtipo_asistencia
+            INNER JOIN 
+                edu_sena.aprendiz ap ON a.aprendiz_idaprendiz = ap.idaprendiz
+            INNER JOIN 
+                edu_sena.ficha fi ON ap.ficha_idficha = fi.idficha
+            INNER JOIN 
+                edu_sena.funcionario_has_ficha fhf ON fi.idficha = fhf.ficha_idficha
+            INNER JOIN 
+                edu_sena.funcionario f ON fhf.funcionario_idfuncionario = f.idfuncionario
+            INNER JOIN 
+                edu_sena.funcionario_has_tipo_funcionario fhtf ON f.idfuncionario = fhtf.funcionario_idfuncionario
+            INNER JOIN 
+                edu_sena.tipo_funcionario tf ON fhtf.tipo_funcionario_idtipo_funcionario = tf.idtipo_funcionario
+            WHERE 
+                ap.idaprendiz = ?
+                AND tf.tipo_funcionario = 'Instructor'
+            ORDER BY 
+                a.fecha_asistencia DESC
         `;
         
         const result = await Conexion.query(query, [idAprendiz]);
@@ -114,7 +132,6 @@ export const listarAsistenciasPorAprendiz = async (idAprendiz: number): Promise<
         return [];
     }
 };
-
 
 
 
