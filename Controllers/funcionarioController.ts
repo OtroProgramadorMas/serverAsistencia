@@ -332,7 +332,6 @@ export const crearFuncionario = async (ctx: any) => {
 };
 
 // Actualizar un funcionario existente con roles y fichas
-// Actualizar un funcionario existente con roles y fichas
 export const actualizarFuncionario = async (ctx: any) => {
   console.log("🟢 Iniciando actualizarFuncionario");
   const { request, response, params } = ctx;
@@ -483,6 +482,8 @@ export const asignarFicha = async (ctx: any) => {
     // Usar nuestra función auxiliar para obtener el body
     const body = await getRequestBody(request);
     console.log("🟢 Cuerpo de la petición asignarFicha:", JSON.stringify(body));
+
+console.log(" id " + body.idFicha + ", id func "+ body.idFuncionario )
 
     if (!body.idFuncionario || !body.idFicha) {
       console.log("🔴 Error: Faltan idFuncionario o idFicha");

@@ -5,6 +5,8 @@ import {
   listarFichasPorPrograma,
   buscarFichaPorId,
   listarEstadosFicha,
+  listarTodasLasFichasConPrograma,
+  listarFichasPorFuncionarioConPrograma,
   crearFicha,
   actualizarFicha,
   eliminarFicha,
@@ -21,8 +23,37 @@ Gets
 */
 
 
+export const fichasConPrograma = async (ctx: any) => {
+  const { response } = ctx;
 
-export const fichasByIdfunc = async (ctx: any) => {
+  try {
+    const fichas = await listarTodasLasFichasConPrograma();
+
+    if (!fichas || fichas.length === 0) {
+      response.status = 404;
+      response.body = {
+        success: false,
+        msg: "No se encontraron fichas con programa",
+      };
+      return;
+    }
+
+    response.status = 200;
+    response.body = {
+      success: true,
+      data: fichas,
+    };
+  } catch (error) {
+    console.error("Error en fichasConPrograma:", error);
+    response.status = 500;
+    response.body = {
+      success: false,
+      msg: "Error interno del servidor",
+    };
+  }
+};
+
+export const fichasActivasByIdfunc = async (ctx: any) => {
   const { response, params } = ctx;
 
   try {
@@ -67,6 +98,45 @@ export const fichasByIdfunc = async (ctx: any) => {
     response.body = { success: false, msg: "Error interno del servidor" };
   }
 };
+
+export const fichasAsignadasPorFuncionario = async (ctx: any) => {
+  const { response, params } = ctx;
+
+  console.log("controller");
+
+  try {
+    const id = Number(params.id);
+
+    if (!id || isNaN(id)) {
+      response.status = 400;
+      response.body = { success: false, msg: "ID de funcionario válido es requerido" };
+      return;
+    }
+
+    console.log("consulta en controller")
+    const fichas = await listarFichasPorFuncionarioConPrograma(id);
+
+    if (!fichas || fichas.length === 0) {
+      response.status = 404;
+      response.body = {
+        success: false,
+        msg: "No se encontraron fichas asignadas a este funcionario",
+      };
+      return;
+    }
+
+    response.status = 200;
+    response.body = {
+      success: true,
+      data: fichas,
+    };
+  } catch (error) {
+    console.error("Error en fichasAsignadasPorFuncionario:", error);
+    response.status = 500;
+    response.body = { success: false, msg: "Error interno del servidor" };
+  }
+};
+
 
 
 export const fichaById = async (ctx: any) => {

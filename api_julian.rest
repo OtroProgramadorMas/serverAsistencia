@@ -13,33 +13,22 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIENpcGFnYXV0YSBBcmJlbMOhZXoiLCJleHAiOjE3NDUyNTQxODh9.5fGUXAYCi40TJ9N3I7VtL8IEajs95ecGynzNkBVXZMI
 
 ###
-GET http://localhost:8000/fichas/1
+GET http://localhost:8000/fichas
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIENpcGFnYXV0YSBBcmJlbMOhZXoiLCJleHAiOjE3NDU1MDM5OTF9.2fAPQ18wiCP5eHYIb8YfE29ZNYsYZI_5ccm93G6XxLQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJhZmRhZmFzIGFkZmFkZmFzZGYiLCJleHAiOjE3NDU2MTYxNzl9.FB0TDU2Wj_5acLBxYFc3mAbekn9Q-CKdO1s9Gs_TS9o
 
 ###
-GET http://localhost:8000/tipoDocumento
+GET http://localhost:8000/fichas/instructor/1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIENpcGFnYXV0YSBBcmJlbMOhZXoiLCJleHAiOjE3NDU0MzkxNjd9.XmIifeHyDbEiDlTN_9MsSVwBKC5vhhKsYAoF5Aaf5Qg
-
-###Estado de formacion
-GET http://localhost:8000/estado_aprendiz
-Content-Type: application/json
-Authorization: Bearer
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJhZmRhZmFzIGFkZmFkZmFzZGYiLCJleHAiOjE3NDU2MTYxNzl9.FB0TDU2Wj_5acLBxYFc3mAbekn9Q-CKdO1s9Gs_TS9o
 
 ###
-GET http://localhost:8000/instructor/24324242;
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIENpcGFnYXV0YSBBcmJlbMOhZXoiLCJleHAiOjE3NDU1MDM5OTF9.2fAPQ18wiCP5eHYIb8YfE29ZNYsYZI_5ccm93G6XxLQ
+@baseUrl = http://localhost:8000
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJhZmRhZmFzIGFkZmFkZmFzZGYiLCJleHAiOjE3NDU2MTYxNzl9.FB0TDU2Wj_5acLBxYFc3mAbekn9Q-CKdO1s9Gs_TS9o
 
-###
-GET http://localhost:8000/funcionarios/1;
+GET {{baseUrl}}/fichas/instructor/1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIENpcGFnYXV0YSBBcmJlbMOhZXoiLCJleHAiOjE3NDU1MDg3NzJ9.vO8OtFnhVSUJ_88MErgDL9WqPUUeDcbNZuyCbS9P6ok
+Authorization: Bearer {{token}}
 
-###
-GET http://localhost:8000/aprendiz/1;
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJNYXJjbyBBbnRvbmlvIENpcGFnYXV0YSBBcmJlbMOhZXoiLCJleHAiOjE3NDU1MDM5OTF9.2fAPQ18wiCP5eHYIb8YfE29ZNYsYZI_5ccm93G6XxLQ
 
 

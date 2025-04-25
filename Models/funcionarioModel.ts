@@ -738,6 +738,9 @@ export const asignarFichaAInstructor = async (
   idFicha: number
 ): Promise<ServiceResponse<void>> => {
   try {
+
+console.log("func id" +idFuncionario + ", ficha id" + idFicha)
+
     // Verificar si el funcionario es instructor
     const checkInstructor = await Conexion.query(`
       SELECT ft.funcionario_idfuncionario

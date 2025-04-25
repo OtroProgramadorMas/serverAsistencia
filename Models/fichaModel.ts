@@ -38,6 +38,20 @@ Read
 
 */
 
+export const listarTodasLasFichasConPrograma = async (): Promise<any[]> => {
+  try {
+    const rows = await Conexion.query(
+      `SELECT f.*, p.codigo_programa, p.nombre_programa
+       FROM ficha f
+       INNER JOIN programa p ON p.idprograma = f.programa_idprograma`
+    );
+    return rows as any[];
+  } catch (error) {
+    console.error("Error al listar todas las fichas con programa:", error);
+    return [];
+  }
+};
+
 export const listarFichasActivas = async (): Promise<Ficha_Asignacion_Estado[]> => {
   try {
     const rows = await Conexion.query(
@@ -56,6 +70,25 @@ export const listarFichasActivas = async (): Promise<Ficha_Asignacion_Estado[]> 
     return [];
   }
 };
+
+export const listarFichasPorFuncionarioConPrograma = async (idFuncionario: number): Promise<any[]> => {
+  try {
+    const rows = await Conexion.query(
+      `SELECT f.idficha, f.codigo_ficha, p.nombre_programa, p.codigo_programa
+       FROM ficha f
+       INNER JOIN funcionario_has_ficha fh ON fh.ficha_idficha = f.idficha
+       INNER JOIN programa p ON p.idprograma = f.programa_idprograma
+       WHERE fh.funcionario_idfuncionario = ?`,
+      [idFuncionario]
+    );
+
+    return rows as any[];
+  } catch (error) {
+    console.error("Error al listar fichas por funcionario con programa:", error);
+    return [];
+  }
+};
+
 
 export const listarFichasPorPrograma = async (programa_id: number): Promise<Ficha_Asignacion_Estado[]> => {
   try {
