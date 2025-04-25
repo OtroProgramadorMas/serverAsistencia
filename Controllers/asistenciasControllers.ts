@@ -116,10 +116,11 @@ export const getAsistenciasByAprendizId = async (ctx: any) => {
     
     const asistencias = await listarAsistenciasPorAprendiz(idAprendiz);
     
+    // Asegurarse de que todas las propiedades se incluyan
     response.status = 200;
     response.body = { 
       success: true, 
-      asistencias,
+      asistencias: asistencias, // Asegúrate de que se envíe el objeto completo
       total: asistencias.length
     };
   } catch (error) {
