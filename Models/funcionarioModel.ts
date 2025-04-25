@@ -69,10 +69,10 @@ export const listarFuncionariosConRoles = async (): Promise<ServiceResponse<Func
     `;
 
     const result = await Conexion.query(query);
-    
+
     // Transformar resultados planos en estructura jerárquica con roles
     const funcionariosMap = new Map<number, FuncionarioConRoles>();
-    
+
     for (const row of result) {
       if (!funcionariosMap.has(row.idFuncionario)) {
         // Crear nuevo funcionario si no existe en el mapa
@@ -92,7 +92,7 @@ export const listarFuncionariosConRoles = async (): Promise<ServiceResponse<Func
           fichas: []
         });
       }
-      
+
       // Agregar rol al funcionario
       const funcionario = funcionariosMap.get(row.idFuncionario);
       if (funcionario) {
@@ -106,7 +106,7 @@ export const listarFuncionariosConRoles = async (): Promise<ServiceResponse<Func
         }
       }
     }
-    
+
     // Cargar fichas para instructores
     for (const funcionario of funcionariosMap.values()) {
       // Verificar si es instructor (asumiendo que el ID de tipo_funcionario para instructor es 2)
@@ -121,12 +121,12 @@ export const listarFuncionariosConRoles = async (): Promise<ServiceResponse<Func
           INNER JOIN programa p ON f.programa_idprograma = p.idprograma
           WHERE fhf.funcionario_idfuncionario = ?
         `;
-        
+
         const fichasResult = await Conexion.query(fichasQuery, [funcionario.idFuncionario]);
         funcionario.fichas = fichasResult;
       }
     }
-    
+
     return {
       success: true,
       data: Array.from(funcionariosMap.values())
@@ -168,10 +168,10 @@ export const listarFuncionariosPorRol = async (nombreRol: string): Promise<Servi
     `;
 
     const result = await Conexion.query(query, [nombreRol]);
-    
+
     // Transformar resultados
     const funcionariosMap = new Map<number, FuncionarioConRoles>();
-    
+
     for (const row of result) {
       if (!funcionariosMap.has(row.idFuncionario)) {
         funcionariosMap.set(row.idFuncionario, {
@@ -190,7 +190,7 @@ export const listarFuncionariosPorRol = async (nombreRol: string): Promise<Servi
           fichas: []
         });
       }
-      
+
       const funcionario = funcionariosMap.get(row.idFuncionario);
       if (funcionario) {
         if (!funcionario.roles.some(r => r.idtipo_funcionario === row.idtipo_funcionario)) {
@@ -202,7 +202,7 @@ export const listarFuncionariosPorRol = async (nombreRol: string): Promise<Servi
         }
       }
     }
-    
+
     // Cargar fichas para instructores
     if (nombreRol === 'instructor') {
       for (const funcionario of funcionariosMap.values()) {
@@ -216,12 +216,12 @@ export const listarFuncionariosPorRol = async (nombreRol: string): Promise<Servi
           INNER JOIN programa p ON f.programa_idprograma = p.idprograma
           WHERE fhf.funcionario_idfuncionario = ?
         `;
-        
+
         const fichasResult = await Conexion.query(fichasQuery, [funcionario.idFuncionario]);
         funcionario.fichas = fichasResult;
       }
     }
-    
+
     return {
       success: true,
       data: Array.from(funcionariosMap.values())
@@ -262,14 +262,14 @@ export const obtenerFuncionarioPorId = async (id: number): Promise<ServiceRespon
     `;
 
     const result = await Conexion.query(query, [id]);
-    
+
     if (result.length === 0) {
       return {
         success: false,
         message: "Funcionario no encontrado"
       };
     }
-    
+
     // Construir el objeto funcionario con sus roles
     const funcionario: FuncionarioConRoles = {
       idFuncionario: result[0].idFuncionario,
@@ -286,7 +286,7 @@ export const obtenerFuncionarioPorId = async (id: number): Promise<ServiceRespon
       roles: [],
       fichas: []
     };
-    
+
     // Agregar roles
     for (const row of result) {
       if (!funcionario.roles.some(r => r.idtipo_funcionario === row.idtipo_funcionario)) {
@@ -297,7 +297,7 @@ export const obtenerFuncionarioPorId = async (id: number): Promise<ServiceRespon
         });
       }
     }
-    
+
     // Verificar si es instructor para cargar fichas
     if (funcionario.roles.some(r => r.tipo_funcionario === 'instructor')) {
       const fichasQuery = `
@@ -310,11 +310,11 @@ export const obtenerFuncionarioPorId = async (id: number): Promise<ServiceRespon
         INNER JOIN programa p ON f.programa_idprograma = p.idprograma
         WHERE fhf.funcionario_idfuncionario = ?
       `;
-      
+
       const fichasResult = await Conexion.query(fichasQuery, [id]);
       funcionario.fichas = fichasResult;
     }
-    
+
     return {
       success: true,
       data: funcionario
@@ -329,22 +329,63 @@ export const obtenerFuncionarioPorId = async (id: number): Promise<ServiceRespon
   }
 };
 
+export const obtenerIdInstructorPorDocumento = async (documento: string): Promise<ServiceResponse<number>> => {
+  try {
+    // Limpiar el documento de caracteres no deseados
+    const documentoLimpio = documento.replace(/[^0-9]/g, '');
+    
+    console.log('Documento original:', documento);
+    console.log('Documento limpio:', documentoLimpio);
+
+    const query = `
+      SELECT f.idFuncionario
+      FROM funcionario f
+      INNER JOIN funcionario_has_tipo_funcionario ft ON f.idFuncionario = ft.funcionario_idfuncionario
+      INNER JOIN tipo_funcionario tf ON ft.tipo_funcionario_idtipo_funcionario = tf.idtipo_funcionario
+      WHERE tf.tipo_funcionario = 'instructor' AND f.documento = ?
+    `;
+
+    const rows = await Conexion.query(query, [documentoLimpio]);
+
+    if (rows && rows.length > 0) {
+      console.log('Resultado encontrado:', rows[0]);
+      return {
+        success: true,
+        data: rows[0].idFuncionario
+      };
+    }
+
+    return {
+      success: false,
+      message: 'No se encontró un instructor con ese documento'
+    };
+  } catch (error) {
+    console.error(`Error al obtener ID del instructor con documento ${documento}:`, error);
+    return {
+      success: false,
+      message: 'Error al buscar el ID del instructor',
+      error
+    };
+  }
+};
+
+
 // Crear nuevo funcionario con roles y asignación de ficha
 export const crearFuncionarioConRoles = async (
-  funcionario: Funcionario, 
-  roles: {idRol: number, password: string}[],
+  funcionario: Funcionario,
+  roles: { idRol: number, password: string }[],
   fichas?: number[]
 ): Promise<ServiceResponse<number>> => {
   try {
     // Iniciar transacción
     await Conexion.query('START TRANSACTION');
-    
+
     // Verificar si el email ya existe
     const checkEmail = await Conexion.query(
       "SELECT idFuncionario FROM funcionario WHERE email = ?",
       [funcionario.email]
     );
-    
+
     if (checkEmail.length > 0) {
       await Conexion.query('ROLLBACK');
       return {
@@ -352,13 +393,13 @@ export const crearFuncionarioConRoles = async (
         message: "El email ya está registrado"
       };
     }
-    
+
     // Verificar si el documento ya existe
     const checkDocumento = await Conexion.query(
       "SELECT idFuncionario FROM funcionario WHERE documento = ? AND tipo_documento_idtipo_documento = ?",
       [funcionario.documento, funcionario.tipo_documento_idtipo_documento]
     );
-    
+
     if (checkDocumento.length > 0) {
       await Conexion.query('ROLLBACK');
       return {
@@ -366,11 +407,11 @@ export const crearFuncionarioConRoles = async (
         message: "El documento ya está registrado"
       };
     }
-    
+
     // Obtener el siguiente ID disponible
     const maxIdResult = await Conexion.query("SELECT MAX(idFuncionario) as maxId FROM funcionario");
     const nuevoId = maxIdResult[0].maxId ? maxIdResult[0].maxId + 1 : 1;
-    
+
     // Insertar funcionario con ID explícito
     const insertQuery = `
       INSERT INTO funcionario (
@@ -378,7 +419,7 @@ export const crearFuncionarioConRoles = async (
         url_imgFuncionario, tipo_documento_idtipo_documento
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `;
-    
+
     await Conexion.query(insertQuery, [
       nuevoId,
       funcionario.documento,
@@ -389,7 +430,7 @@ export const crearFuncionarioConRoles = async (
       funcionario.url_imgFuncionario || null,
       funcionario.tipo_documento_idtipo_documento
     ]);
-    
+
     // Insertar roles
     if (roles.length === 0) {
       await Conexion.query('ROLLBACK');
@@ -398,21 +439,21 @@ export const crearFuncionarioConRoles = async (
         message: "Debe asignar al menos un rol al funcionario"
       };
     }
-    
+
     for (const rol of roles) {
       const insertRolQuery = `
         INSERT INTO funcionario_has_tipo_funcionario (
           funcionario_idfuncionario, tipo_funcionario_idtipo_funcionario, password
         ) VALUES (?, ?, ?)
       `;
-      
+
       await Conexion.query(insertRolQuery, [
         nuevoId,
         rol.idRol,
         rol.password
       ]);
     }
-    
+
     // Asignar fichas si es instructor y se proporcionaron fichas
     if (fichas && fichas.length > 0) {
       const fichasIds = [];
@@ -423,7 +464,7 @@ export const crearFuncionarioConRoles = async (
           // Buscar el ID correspondiente al código
           const fichaQuery = "SELECT idficha FROM ficha WHERE codigo_ficha = ?";
           const fichaResult = await Conexion.query(fichaQuery, [fichaValue.toString()]);
-          
+
           if (fichaResult.length > 0) {
             fichasIds.push(fichaResult[0].idficha);
           } else {
@@ -438,7 +479,7 @@ export const crearFuncionarioConRoles = async (
           fichasIds.push(fichaValue);
         }
       }
-      
+
       // Insertar las fichas con los IDs correctos
       for (const idFicha of fichasIds) {
         const insertFichaQuery = `
@@ -446,13 +487,13 @@ export const crearFuncionarioConRoles = async (
             funcionario_idfuncionario, ficha_idficha
           ) VALUES (?, ?)
         `;
-        
+
         await Conexion.query(insertFichaQuery, [nuevoId, idFicha]);
       }
     }
-    
+
     await Conexion.query('COMMIT');
-    
+
     return {
       success: true,
       message: "Funcionario creado exitosamente",
@@ -473,19 +514,19 @@ export const crearFuncionarioConRoles = async (
 export const actualizarFuncionarioConRoles = async (
   id: number,
   funcionario: Partial<Funcionario>,
-  roles?: {idRol: number, password: string}[],
+  roles?: { idRol: number, password: string }[],
   fichas?: number[]
 ): Promise<ServiceResponse<void>> => {
   try {
     // Iniciar transacción
     await Conexion.query('START TRANSACTION');
-    
+
     // Verificar si el funcionario existe
     const checkFuncionario = await Conexion.query(
       "SELECT idFuncionario FROM funcionario WHERE idFuncionario = ?",
       [id]
     );
-    
+
     if (checkFuncionario.length === 0) {
       await Conexion.query('ROLLBACK');
       return {
@@ -493,14 +534,14 @@ export const actualizarFuncionarioConRoles = async (
         message: "El funcionario no existe"
       };
     }
-    
+
     // Verificar email único (si se va a actualizar)
     if (funcionario.email) {
       const checkEmail = await Conexion.query(
         "SELECT idFuncionario FROM funcionario WHERE email = ? AND idFuncionario != ?",
         [funcionario.email, id]
       );
-      
+
       if (checkEmail.length > 0) {
         await Conexion.query('ROLLBACK');
         return {
@@ -509,14 +550,14 @@ export const actualizarFuncionarioConRoles = async (
         };
       }
     }
-    
+
     // Verificar documento único (si se va a actualizar)
     if (funcionario.documento && funcionario.tipo_documento_idtipo_documento) {
       const checkDocumento = await Conexion.query(
         "SELECT idFuncionario FROM funcionario WHERE documento = ? AND tipo_documento_idtipo_documento = ? AND idFuncionario != ?",
         [funcionario.documento, funcionario.tipo_documento_idtipo_documento, id]
       );
-      
+
       if (checkDocumento.length > 0) {
         await Conexion.query('ROLLBACK');
         return {
@@ -525,54 +566,54 @@ export const actualizarFuncionarioConRoles = async (
         };
       }
     }
-    
+
     // Construir consulta de actualización
     const updateFields: string[] = [];
     const updateValues: any[] = [];
-    
+
     if (funcionario.documento) {
       updateFields.push("documento = ?");
       updateValues.push(funcionario.documento);
     }
-    
+
     if (funcionario.nombres) {
       updateFields.push("nombres = ?");
       updateValues.push(funcionario.nombres);
     }
-    
+
     if (funcionario.apellidos) {
       updateFields.push("apellidos = ?");
       updateValues.push(funcionario.apellidos);
     }
-    
+
     if (funcionario.email) {
       updateFields.push("email = ?");
       updateValues.push(funcionario.email);
     }
-    
+
     if (funcionario.telefono) {
       updateFields.push("telefono = ?");
       updateValues.push(funcionario.telefono);
     }
-    
+
     if (funcionario.url_imgFuncionario !== undefined) {
       updateFields.push("url_imgFuncionario = ?");
       updateValues.push(funcionario.url_imgFuncionario);
     }
-    
+
     if (funcionario.tipo_documento_idtipo_documento) {
       updateFields.push("tipo_documento_idtipo_documento = ?");
       updateValues.push(funcionario.tipo_documento_idtipo_documento);
     }
-    
+
     // Actualizar datos básicos del funcionario si hay cambios
     if (updateFields.length > 0) {
       const updateQuery = `UPDATE funcionario SET ${updateFields.join(', ')} WHERE idFuncionario = ?`;
       updateValues.push(id);
-      
+
       await Conexion.query(updateQuery, updateValues);
     }
-    
+
     // Actualizar roles si se proporcionaron
     if (roles && roles.length > 0) {
       // Eliminar roles actuales
@@ -580,7 +621,7 @@ export const actualizarFuncionarioConRoles = async (
         "DELETE FROM funcionario_has_tipo_funcionario WHERE funcionario_idfuncionario = ?",
         [id]
       );
-      
+
       // Insertar nuevos roles
       for (const rol of roles) {
         const insertRolQuery = `
@@ -588,7 +629,7 @@ export const actualizarFuncionarioConRoles = async (
             funcionario_idfuncionario, tipo_funcionario_idtipo_funcionario, password
           ) VALUES (?, ?, ?)
         `;
-        
+
         await Conexion.query(insertRolQuery, [
           id,
           rol.idRol,
@@ -596,7 +637,7 @@ export const actualizarFuncionarioConRoles = async (
         ]);
       }
     }
-    
+
     // Actualizar fichas asignadas si se proporcionaron
     if (fichas !== undefined) {
       // Eliminar asignaciones actuales
@@ -604,7 +645,7 @@ export const actualizarFuncionarioConRoles = async (
         "DELETE FROM funcionario_has_ficha WHERE funcionario_idfuncionario = ?",
         [id]
       );
-      
+
       // Insertar nuevas asignaciones
       if (fichas.length > 0) {
         for (const idFicha of fichas) {
@@ -613,14 +654,14 @@ export const actualizarFuncionarioConRoles = async (
               funcionario_idfuncionario, ficha_idficha
             ) VALUES (?, ?)
           `;
-          
+
           await Conexion.query(insertFichaQuery, [id, idFicha]);
         }
       }
     }
-    
+
     await Conexion.query('COMMIT');
-    
+
     return {
       success: true,
       message: "Funcionario actualizado exitosamente"
@@ -641,13 +682,13 @@ export const eliminarFuncionario = async (id: number): Promise<ServiceResponse<v
   try {
     // Iniciar transacción
     await Conexion.query('START TRANSACTION');
-    
+
     // Verificar si el funcionario existe
     const checkFuncionario = await Conexion.query(
       "SELECT idFuncionario FROM funcionario WHERE idFuncionario = ?",
       [id]
     );
-    
+
     if (checkFuncionario.length === 0) {
       await Conexion.query('ROLLBACK');
       return {
@@ -655,27 +696,27 @@ export const eliminarFuncionario = async (id: number): Promise<ServiceResponse<v
         message: "El funcionario no existe"
       };
     }
-    
+
     // Eliminar relaciones funcionario_has_tipo_funcionario
     await Conexion.query(
       "DELETE FROM funcionario_has_tipo_funcionario WHERE funcionario_idfuncionario = ?",
       [id]
     );
-    
+
     // Eliminar relaciones funcionario_has_ficha
     await Conexion.query(
       "DELETE FROM funcionario_has_ficha WHERE funcionario_idfuncionario = ?",
       [id]
     );
-    
+
     // Eliminar funcionario
     await Conexion.query(
       "DELETE FROM funcionario WHERE idFuncionario = ?",
       [id]
     );
-    
+
     await Conexion.query('COMMIT');
-    
+
     return {
       success: true,
       message: "Funcionario eliminado exitosamente"
@@ -693,7 +734,7 @@ export const eliminarFuncionario = async (id: number): Promise<ServiceResponse<v
 
 // Asignar ficha a instructor
 export const asignarFichaAInstructor = async (
-  idFuncionario: number, 
+  idFuncionario: number,
   idFicha: number
 ): Promise<ServiceResponse<void>> => {
   try {
@@ -704,46 +745,46 @@ export const asignarFichaAInstructor = async (
       INNER JOIN tipo_funcionario tf ON ft.tipo_funcionario_idtipo_funcionario = tf.idtipo_funcionario
       WHERE ft.funcionario_idfuncionario = ? AND tf.tipo_funcionario = 'instructor'
     `, [idFuncionario]);
-    
+
     if (checkInstructor.length === 0) {
       return {
         success: false,
         message: "El funcionario no es instructor o no existe"
       };
     }
-    
+
     // Verificar si la ficha existe
     const checkFicha = await Conexion.query(
       "SELECT idficha FROM ficha WHERE idficha = ?",
       [idFicha]
     );
-    
+
     if (checkFicha.length === 0) {
       return {
         success: false,
         message: "La ficha no existe"
       };
     }
-    
+
     // Verificar si ya existe la asignación
     const checkAsignacion = await Conexion.query(
       "SELECT * FROM funcionario_has_ficha WHERE funcionario_idfuncionario = ? AND ficha_idficha = ?",
       [idFuncionario, idFicha]
     );
-    
+
     if (checkAsignacion.length > 0) {
       return {
         success: true,
         message: "El instructor ya está asignado a esta ficha"
       };
     }
-    
+
     // Realizar la asignación
     await Conexion.query(
       "INSERT INTO funcionario_has_ficha (funcionario_idfuncionario, ficha_idficha) VALUES (?, ?)",
       [idFuncionario, idFicha]
     );
-    
+
     return {
       success: true,
       message: "Ficha asignada exitosamente al instructor"
@@ -760,7 +801,7 @@ export const asignarFichaAInstructor = async (
 
 // Desasignar ficha de instructor
 export const desasignarFichaDeInstructor = async (
-  idFuncionario: number, 
+  idFuncionario: number,
   idFicha: number
 ): Promise<ServiceResponse<void>> => {
   try {
@@ -769,20 +810,20 @@ export const desasignarFichaDeInstructor = async (
       "SELECT * FROM funcionario_has_ficha WHERE funcionario_idfuncionario = ? AND ficha_idficha = ?",
       [idFuncionario, idFicha]
     );
-    
+
     if (checkAsignacion.length === 0) {
       return {
         success: false,
         message: "El instructor no está asignado a esta ficha"
       };
     }
-    
+
     // Eliminar la asignación
     await Conexion.query(
       "DELETE FROM funcionario_has_ficha WHERE funcionario_idfuncionario = ? AND ficha_idficha = ?",
       [idFuncionario, idFicha]
     );
-    
+
     return {
       success: true,
       message: "Ficha desasignada exitosamente del instructor"
@@ -798,11 +839,11 @@ export const desasignarFichaDeInstructor = async (
 };
 
 // Listar tipos de funcionario (roles)
-export const listarTiposFuncionario = async (): Promise<ServiceResponse<{idtipo_funcionario: number, tipo_funcionario: string}[]>> => {
+export const listarTiposFuncionario = async (): Promise<ServiceResponse<{ idtipo_funcionario: number, tipo_funcionario: string }[]>> => {
   try {
     const query = "SELECT idtipo_funcionario, tipo_funcionario FROM tipo_funcionario";
     const result = await Conexion.query(query);
-    
+
     return {
       success: true,
       data: result
